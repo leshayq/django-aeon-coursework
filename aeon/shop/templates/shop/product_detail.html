@@ -1,0 +1,30 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+<div class="wrapper">
+    <div class="product-detail">
+        <div class="detail-link-path">
+            <p> <a href="#">{{ product.category }}</a> &#x2022; <a href="#">{{ product.brand }}</a> &#x2022; <a>{{ product.title }}</a></p>
+        </div>
+        <p class="detail-title">{{ product.title }}</p>
+        <ul>
+            <li>Товар</li>
+            <li>Характеристики</li>
+        </ul>
+        <div class="detail-halving">
+            <div class='w-2'>
+                <div class="detail-image">
+                    <img src="{{ product.image.url }}" width="700" height="700">
+                </div>
+                
+            </div>
+        
+            <div class='w-2'>
+                <span class="color-box" style="background-color: {{ product.color }};"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
