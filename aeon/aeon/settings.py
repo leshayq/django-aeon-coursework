@@ -62,8 +62,8 @@ DATABASES = {
         'USER': os.getenv('USER'),
         'PASSWORD': os.getenv('PASSWORD'),
         'HOST':'localhost',
-        'PORT':'3308',
-    }
+        'PORT': os.getenv('PORT'),
+    }   
 }
 
 AUTH_PASSWORD_VALIDATORS = [

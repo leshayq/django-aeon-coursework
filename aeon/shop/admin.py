@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product
+from .models import Category, Product, Rating
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -17,3 +17,11 @@ class ProductAdmin(admin.ModelAdmin):
 
     def get_prepopulated_fields(self, request, obj=None):
         return {'slug': ('title',)}
+    
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'rating')
+    ordering = ('product',)
+    list_filter = ('rating', 'product')
+
+

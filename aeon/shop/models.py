@@ -4,6 +4,10 @@ from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
 from colorfield.fields import ColorField
+from django.contrib.auth import get_user_model
+from django.db.models import Avg
+
+User = get_user_model()
 
 def rand_slug():
     """
@@ -48,11 +52,15 @@ class Product(models.Model):
     available = models.BooleanField('Наявність', default=True)
     created_at = models.DateTimeField('Дата створення', auto_now_add=True)
     updated_at = models.DateTimeField('Дата оновлення', auto_now=True)
+
         
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товари'
 
+    def average_rating(self) -> float:
+        return Rating.objects.filter(product=self).aggregate(Avg("rating"))["rating__avg"] or 0
+    
     def __str__(self):
         return self.title
     
@@ -70,3 +78,10 @@ class ProductProxy(Product):
     class Meta:
         proxy = True
 
+class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.product.title}: {self.rating}"

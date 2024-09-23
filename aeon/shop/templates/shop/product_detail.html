@@ -31,7 +31,21 @@
                     <p>{{ product.price }}<span>₴</span></p>
                     <div class="available">
                         <p>В наявностi</p>
-                    </div>
+                    </div> 
+                </div>
+                <div class="star-rating">
+                    <ul class="rating-list">
+                        <li onclick="rate(5, {{ product.id }})">
+                            <i class="fa fa-star {% if rating > 4 %} checked {% endif %}" title="Rate 5"></i></li>
+                        <li onclick="rate(4, {{ product.id }})">
+                            <i class="fa fa-star {% if rating > 3 %} checked {% endif %}" title="Rate 4"></i></li>
+                        <li onclick="rate(3, {{ product.id }})">
+                            <i class="fa fa-star {% if rating > 2 %} checked {% endif %}" title="Rate 3"></i></li>
+                        <li onclick="rate(2, {{ product.id }})">
+                            <i class="fa fa-star {% if rating > 1 %} checked {% endif %}" title="Rate 2"></i></li>
+                        <li onclick="rate(1, {{ product.id }})">
+                            <i class="fa fa-star {% if rating > 0 %} checked {% endif %}" title="Rate 1"></i></li>
+                      </ul>
                 </div>
 
                 <button class="red-button">
@@ -95,5 +109,16 @@
     </div>
 </div>
 
-
+<script>
+    const rate = (rating, product_id) => {
+        fetch(`/rate/${product_id}/${rating}/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(rest => {
+            window.location.reload();
+        })
+    }
+</script>
 {% endblock content %}

@@ -248,16 +248,17 @@ body {
 }
 
 .rating-list {
-    display: inline-block;
+    display: inline-block !important;
     list-style: none;
-    padding: 0;
-    margin: 0;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .rating-list li {
     float: right;
     color: #ddd;
     padding: 5px;
+    margin: 0 10px 0 0 !important;
 }
   
 .rating-list li:hover,
@@ -524,7 +525,7 @@ body {
     font-size: 2.5rem;
     font-weight: 400;
     margin-top: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 }
 
 .detail-price span {
@@ -586,5 +587,9 @@ body {
 .characteristics-description p {
     font-size: 1.2rem;
     color: #363636;
+}
+
+.star-rating {
+    margin-bottom: 10px;
 }
 /* ff4747 */
