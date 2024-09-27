@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+<div class="form">
+    <h2>Вхiд</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class='form-element'>
+            {{ field.label_tag }}
+            {{ field }}
+            {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <input type="submit" value="Вхід" class="auth-button">
+    </form>
+</div>
+{% endblock content %}

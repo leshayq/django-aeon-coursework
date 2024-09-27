@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'shop.apps.ShopConfig',
+    'users.apps.UsersConfig',
     
     'colorfield',
 ]

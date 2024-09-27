@@ -65,7 +65,7 @@ class Product(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse("shop:product_detail", args=[str(self.slug)])
+        return reverse("shop:product_detail", kwargs={'slug': self.slug, 'category__slug': self.category.slug})
     
         
 class ProductManager(models.Manager):

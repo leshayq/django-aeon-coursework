@@ -1,6 +1,6 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.http import HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Category, ProductProxy, Product, Rating
 from django.views.generic.list import ListView
@@ -52,20 +52,25 @@ class RateView(View):
         product = ProductProxy.objects.get(id=product_id)
         Rating.objects.filter(product=product, user=request.user).delete()
         product.rating_set.create(user=request.user, rating=rating)
-        return redirect('index')  # Перенаправляем на index (страницу списка продуктов)
+        return redirect('index') 
 
 class ProductDetailView(DetailView):
     model = ProductProxy
     template_name = 'shop/product_detail.html'
     context_object_name = 'product'
 
-    def get_queryset(self):
-        return filter_objects(ProductProxy.objects, slug=self.kwargs['slug'])
+    def get_object(self, *args, **kwargs):
+        try:
+            return Product.objects.get(slug=self.kwargs.get('slug'), category__slug=self.kwargs.get('category__slug'))
+        except Product.DoesNotExists:
+            raise Http404
     
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)    
         context['title'] = self.object.title
-        product_rating = Rating.objects.filter(product=self.object, user=self.request.user).first()
+        product_rating = None
+        if self.request.user.is_authenticated:
+            product_rating = Rating.objects.filter(product=self.object, user=self.request.user).first()
         self.object.user_rating = product_rating.rating if product_rating else 0
         context['rating'] = self.object.user_rating
 
