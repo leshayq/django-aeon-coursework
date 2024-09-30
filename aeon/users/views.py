@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from .forms import UserLoginForm
 from django.contrib.auth import authenticate, login, logout
@@ -13,14 +13,15 @@ def login_user(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
 
-        email = request.POST.get('email')
+        email = request.POST.get('username')
         password = request.POST.get('password')
 
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
             print(user.username, user.password)
-            messages.success(request, f'Вітаємо {email}!')
+            # messages.success(request, f'Вітаємо {email}!')
+            return HttpResponse(status=204)
         else:
             messages.error(request, "Ім'я користувача або пароль невірні. Спробуйте ще раз.")
     context = {

@@ -99,6 +99,13 @@ body {
     margin: 15px;
 }
 
+.account-cart-wish button {
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background: none;
+}
+
 /* .ad-banner {
     width: auto;
     height: auto;
@@ -595,13 +602,12 @@ body {
 
 .form {
     padding: 20px 30px;
-    background-color: #26d100;
     border-radius: 10px;
 }
 
-.form h2 {
+.form h5 {
     text-align: center;
-    margin: 10px 0 20px;
+    /* margin: 10px 0 20px; */
     font-size: 25px;
 }
 
@@ -628,6 +634,13 @@ body {
     outline: none;
     border-radius: 10px;
     cursor: pointer;
+    background-color: var(--main-red-color);
+    color: #fff;
+    transition: background-color ease 0.3s;
+}
+
+.auth-button:hover {
+    background-color: #e13c3c; 
 }
 
 /* ff4747 */
