@@ -15,6 +15,7 @@ body {
 
 :root {
     --main-red-color: #ff4747;
+    --hover-red-color: #e13c3c;
 }
 
 .a-no-link {
@@ -63,7 +64,7 @@ body {
 }
 
 .catalog-button:hover {
-    background-color: #e13c3c; 
+    background-color: var(--hover-red-color);
 }
 
 .searchbar {
@@ -640,7 +641,25 @@ body {
 }
 
 .auth-button:hover {
-    background-color: #e13c3c; 
+    background-color: var(--hover-red-color); 
+}
+
+.no-account {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1rem;
+}
+
+.no-account a {
+    text-decoration: none;
+    color: var(--main-red-color);
+    font-weight: 400;
+    transition: font-weight ease 0.3s;
+}
+
+.no-account a:hover {
+    color: var(--hover-red-color);
+    font-weight: 600;
 }
 
 /* ff4747 */
