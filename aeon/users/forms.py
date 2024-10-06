@@ -11,7 +11,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'password1', 'password2']
+        fields = ['email', 'first_name', 'password1', 'password2']
 
 class UserLoginForm(AuthenticationForm):
     username = forms.EmailField(widget=TextInput(attrs={'placeholder': 'Ваш e-mail', 'id': 'id_email'}))
@@ -19,4 +19,5 @@ class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         self.fields['password'].widget = PasswordInput(attrs={'placeholder': 'Ваш пароль', 'id': 'id_password1'})
-        self.fields['username'].label = "Email"
+        self.fields['password'].label = "Пароль"
+        self.fields['username'].label = "Електронна пошта"

@@ -1,18 +1,15 @@
 <form method="post" hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
-        <div class="form">
-        <h5 class="modal-title">Вхiд</h5>
-            {% for field in form %}
-            <div class='form-element'>
-                {{ field.label_tag }}
-                {{ field }}
-                {% for error in field.errors %}
-                    <div class="invalid-feedback">{{ error }}</div>
-                {% endfor %}
-            </div>
+    <div class="form">
+    <h5 class="modal-title">Вхiд</h5>
+        {% for field in form %}
+        <div class='form-element'>
+            {{ field.label_tag }}
+            {{ field }}
+            {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
             {% endfor %}
-            <input type="submit" value="Вхід" class="auth-button">
-            <div class='no-account'>
-                <p class='faded-text'>Ще не маєте акаунту? <a href='#'>Зареєструватися</a></p>
-            </div>
         </div>
-    </form>
+        {% endfor %}
+        <input type="submit" value="Вхід" class="auth-button">
+    </div>
+</form>
