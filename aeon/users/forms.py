@@ -13,6 +13,14 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['email', 'first_name', 'password1', 'password2']
 
+    def __init__(self, *args, **kwargs):
+        super(UserRegisterForm, self).__init__(*args, **kwargs)
+        # self.fields['password'].widget = PasswordInput(attrs={'placeholder': 'Ваш пароль', 'id': 'id_password1'})
+        self.fields['email'].label = "E-mail"
+        self.fields['first_name'].label = "Ім'я"
+        self.fields['password1'].label = "Пароль"
+        self.fields['password2'].label = 'Підтвердження пароля'
+
 class UserLoginForm(AuthenticationForm):
     username = forms.EmailField(widget=TextInput(attrs={'placeholder': 'Ваш e-mail', 'id': 'id_email'}))
 

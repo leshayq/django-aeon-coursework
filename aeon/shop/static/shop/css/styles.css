@@ -301,6 +301,8 @@ body {
     display: flex;
     box-sizing: border-box;
     align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .w-2 {
     width: 50%;
@@ -463,7 +465,7 @@ body {
     color: var(--main-red-color);
 }
 
-.characteristics-list ul li a::after {
+.characteristics-list ul li a::after, .reg-log a::after {
     content: '';
     position: absolute;
     left: 0;
@@ -474,7 +476,7 @@ body {
     transition: width 0.4s ease; 
 }
 
-.characteristics-list ul li a:hover::after {
+.characteristics-list ul li a:hover::after, .reg-log a:hover::after {
     width: 100%; 
 }
 
@@ -644,22 +646,103 @@ body {
     background-color: var(--hover-red-color); 
 }
 
-.no-account {
+.reg-log {
     text-align: center;
     margin-top: 15px;
     font-size: 1rem;
 }
 
-.no-account a {
+.reg-log button {
     text-decoration: none;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+.reg-log a {
     color: var(--main-red-color);
+    cursor: pointer;
+    font-size: 1rem;
     font-weight: 400;
+    position: relative;
     transition: font-weight ease 0.3s;
 }
 
-.no-account a:hover {
-    color: var(--hover-red-color);
+.reg-log a:hover {
     font-weight: 600;
 }
 
+.category-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.category-filters {
+    min-width: 20%;
+    margin-right: 15px;
+}
+.category-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.category-sales {
+    padding: 0 0 20px 0;
+}
+
+.category-sales h1 {
+    color: var(--main-red-color);
+}
+
+.filter {
+    padding: 10px;
+}
+.filter-price {
+    display: flex;
+    justify-content: space-between;
+}
+.filter-price input[type='number'] {
+    width: 50%;
+    margin: 10px 10px 10px 0;
+    padding: 10px;
+    outline: none;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+.faded-field p {
+    font-weight: 600;
+    color: #5c5c5c;
+}
+
+.filter-brand {
+    justify-content: flex-start;
+    flex-direction: column;
+    margin: 10px;
+}
+
+.filter-brand input[type='checkbox'] {
+    margin-right: 7px;
+    margin-bottom: 12px;
+}
+
+.category-sort-by {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.category-sort-by select {
+    margin-left: 10px;
+}
 /* ff4747 */

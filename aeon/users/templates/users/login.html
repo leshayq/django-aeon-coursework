@@ -11,5 +11,13 @@
         </div>
         {% endfor %}
         <input type="submit" value="Вхід" class="auth-button">
+
+        <div class='reg-log'>
+            Ще не маєте акаунту?
+            <a  
+            hx-get='{% url "users:register" %}' 
+            hx-target="#dialog">Зареєструватися   
+            </a>
+        </div>
     </div>
 </form>

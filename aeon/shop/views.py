@@ -75,3 +75,46 @@ class ProductDetailView(DetailView):
         context['rating'] = self.object.user_rating
 
         return context
+
+class CategoryListView(ListView):
+    model = ProductProxy
+    template_name = 'shop/category_list.html'
+    context_object_name = 'category_products'
+
+    def get_queryset(self):
+        category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
+        queryset = super().get_queryset().filter(category=category)
+
+        filters = {}
+        ordering = None
+        low_price = self.request.GET.get('lp')
+        max_price = self.request.GET.get('mp')
+        brands = self.request.GET.getlist('brand_key')
+        ordering = self.request.GET.get('sort-option')
+        print(ordering)
+        try:
+            if low_price:
+                filters['price__gte'] = float(low_price)
+            if max_price:
+                filters['price__lte'] = float(max_price)
+            if brands:
+                filters['brand__in'] = brands
+        except ValueError:
+            pass 
+
+        if filters:
+            queryset = queryset.filter(**filters)
+
+        if ordering:
+            queryset = queryset.order_by(ordering)
+
+        return queryset
+    def get_context_data(self):
+        context = super().get_context_data()
+        category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
+        all_products_in_category = ProductProxy.objects.filter(category=category)
+        context['category_title'] = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
+        context['brand_list'] = all_products_in_category.values_list('brand', flat=True).distinct()
+        context['selected_brands'] = self.request.GET.getlist('brand_key')
+        return context
+    
