@@ -264,7 +264,6 @@ body {
 
 .rating-list li {
     float: right;
-    color: #ddd;
     padding: 5px;
     margin: 0 10px 0 0 !important;
 }
@@ -276,6 +275,14 @@ body {
   
 .checked {
       color: orange;
+}
+
+.star-rating {
+    color: #ddd;
+}
+
+.star-rating span:last-child {
+    color: #5c5c5c;
 }
 
 .small-add-to-cart {
@@ -675,7 +682,7 @@ body {
 
 .category-flex {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .category-filters {
@@ -739,10 +746,19 @@ input[type="number"]:focus {
 .category-sort-by {
     display: flex;
     align-items: center;
+    align-items: center;
     margin-bottom: 15px;
+    margin-left: 10px;
+    font-size: 16px;
 }
 
 .category-sort-by select {
+    padding: 5px;
+    outline: none;
+    font-family: "Rubik", sans-serif;
     margin-left: 10px;
+    border: 1px solid #5c5c5c;
+    border-radius: 8px;
+    font-size: 16px;
 }
 /* ff4747 */

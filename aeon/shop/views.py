@@ -9,6 +9,8 @@ from django.views import View
 from django.views.generic.detail import DetailView
 from common.services import all_objects, filter_objects
 from django.contrib.auth.decorators import login_required
+from .filters import check_filtering
+
 
 # class IndexView(ListView):
 #     model = ProductProxy
@@ -85,23 +87,7 @@ class CategoryListView(ListView):
         category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
         queryset = super().get_queryset().filter(category=category)
 
-        filters = {}
-        ordering = None
-        low_price = self.request.GET.get('lp')
-        max_price = self.request.GET.get('mp')
-        brands = self.request.GET.getlist('brand_key')
-        ordering = self.request.GET.get('sort-option')
-        print(ordering)
-        try:
-            if low_price:
-                filters['price__gte'] = float(low_price)
-            if max_price:
-                filters['price__lte'] = float(max_price)
-            if brands:
-                filters['brand__in'] = brands
-        except ValueError:
-            pass 
-
+        filters, ordering = check_filtering(self.request)
         if filters:
             queryset = queryset.filter(**filters)
 

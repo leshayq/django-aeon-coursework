@@ -6,7 +6,7 @@
 
 <div class='category-flex'>
     <div class='category-filters'>
-        <form method="get">
+        <form method="get" id="sort-form">
             <div class='detail-buying filter'>
                 <div class="faded-field">
                     <p>Ціна(грн)</p>
@@ -23,7 +23,7 @@
                     <p>Виробник</p>
                 </div>
 
-                <div class="filter-price filter-brand">
+                <div class="filter-price filter-brand" id="brands">
                     {% for brand in brand_list %}
                     <div>
                         <input type="checkbox" name="brand_key" value="{{ brand }}" {% if brand in selected_brands %} checked {% endif %}/>
@@ -31,19 +31,18 @@
                     </div>
                     {% endfor %}
                 </div>
-
-                <input type="submit" class='auth-button' value="ОК"/>
             </div>
-        </form>
+            <input type="submit" class='auth-button' value="ОК"/>
     </div>
     <div>
         <div class="category-sort-by">
             <p>Виводити</p>
-            <select name="sort-option" id="sort-option">
-                <!-- <option value="popular" selected>За популярністю</option> -->
-                <option value="price">Ціна: за збільшенням</option>
-                <option value="-price">Ціна: за збільшенням</option>
-            </select>
+                <select name="sort-option" id="sort-option">
+                    <!-- <option value="popular" selected>За популярністю</option> -->
+                    <option value="price">Ціна: за збільшенням</option>
+                    <option value="-price">Ціна: за зменшенням</option>
+                </select>
+            </form>
         </div>
 
         <div class="most-saled">
@@ -77,6 +76,11 @@
                             </div>
                         </div>
                     </div>  
+
+                    {% empty %}
+                    <div>
+                        <p>За вашим запитом не знайдено товарів.</p>
+                    </div>
                 {% endfor %}
             </div>
         </div>
