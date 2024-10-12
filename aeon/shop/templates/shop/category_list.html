@@ -7,6 +7,13 @@
 <div class='category-flex'>
     <div class='category-filters'>
         <form method="get" id="sort-form">
+            <div class="searchbar category-searchbar">
+                {% if not request.GET.search_title %}
+                <input type="text" placeholder="{{ category_title }}" name="search_title" id="search_title">
+                {% else %}
+                <input type="text" placeholder="{{ category_title }}" name="search_title" id="search_title" value="{{ request.GET.search_title }}">
+                {% endif %}
+            </div>
             <div class='detail-buying filter'>
                 <div class="faded-field">
                     <p>Ціна(грн)</p>
@@ -24,12 +31,29 @@
                 </div>
 
                 <div class="filter-price filter-brand" id="brands">
-                    {% for brand in brand_list %}
-                    <div>
+                    {% for brand in first_brand_list %}
+                    <div class="manu-filter">
                         <input type="checkbox" name="brand_key" value="{{ brand }}" {% if brand in selected_brands %} checked {% endif %}/>
                         <label for="{{ brand }}">{{ brand }}</label>
                     </div>
                     {% endfor %}
+                    
+                    {% if show_all_brands %}
+                    <div id="more-brands" style="display: block;">
+                    {% else %}
+                    <div id="more-brands" style="display: none;">
+                    {% endif %}
+                        {% for brand in remaining_brand_list %}
+                        <div class="manu-filter">
+                            <input type="checkbox" name="brand_key" value="{{ brand }}" {% if brand in selected_brands %} checked {% endif %}/>
+                            <label for="{{ brand }}">{{ brand }}</label>
+                        </div>
+                        {% endfor %}    
+                    </div>
+
+                    {% if not show_all_brands %}
+                    <button class='load-more-button' type='button' id="show-more-brands" onclick="showMoreBrands()">Показати ще</button>
+                    {% endif %}
                 </div>
             </div>
             <input type="submit" class='auth-button' value="ОК"/>
@@ -37,8 +61,8 @@
     <div>
         <div class="category-sort-by">
             <p>Виводити</p>
-                <select name="sort-option" id="sort-option">
-                    <!-- <option value="popular" selected>За популярністю</option> -->
+                <select name="sort_option" id="sort_option">
+                    <option value="popularity" selected>За популярністю</option>
                     <option value="price">Ціна: за збільшенням</option>
                     <option value="-price">Ціна: за зменшенням</option>
                 </select>

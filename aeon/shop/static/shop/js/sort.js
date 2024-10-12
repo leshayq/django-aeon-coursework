@@ -1,4 +1,4 @@
-$('#sort-option').change(function(event){
+$('#sort_option').change(function(event){
     var selectedcategory = $(this).children("option:selected").val();
     sessionStorage.setItem("itemName",selectedcategory);
     $('#sort-form').submit()

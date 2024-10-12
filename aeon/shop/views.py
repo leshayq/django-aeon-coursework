@@ -27,12 +27,16 @@ from .filters import check_filtering
 class IndexView(TemplateView):
     template_name = "shop/index.html"
 
+    def get_products_with_rating(self, items):
+        for product in items:
+            product.rating_count = Rating.objects.filter(product=product).count()
+        return items
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         products = ProductProxy.objects.all()
-        for product in products:
-            product.rating_count = Rating.objects.filter(product=product).count()
-        context['products'] = products
+
+        context['products'] = self.get_products_with_rating(products)
         return context
 
 # def index(request):
@@ -94,13 +98,27 @@ class CategoryListView(ListView):
         if ordering:
             queryset = queryset.order_by(ordering)
 
+        queryset = IndexView.get_products_with_rating(self, queryset)
         return queryset
     def get_context_data(self):
         context = super().get_context_data()
         category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
+        
         all_products_in_category = ProductProxy.objects.filter(category=category)
+
+        brand_list = all_products_in_category.values_list('brand', flat=True).distinct().order_by('brand')
+
+        first_brand_list = brand_list[:3]
+        remaining_brand_list = brand_list[3:]
+
+        selected_brands = self.request.GET.getlist('brand_key')
+        show_all_brands = any(brand in remaining_brand_list for brand in selected_brands)
+
         context['category_title'] = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
-        context['brand_list'] = all_products_in_category.values_list('brand', flat=True).distinct()
-        context['selected_brands'] = self.request.GET.getlist('brand_key')
+        context['first_brand_list'] = first_brand_list
+        context['remaining_brand_list'] = remaining_brand_list
+        context['selected_brands'] = selected_brands
+        context['show_all_brands'] = show_all_brands
+        
         return context
     

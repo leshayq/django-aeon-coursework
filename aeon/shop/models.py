@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django.urls import reverse
 from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
-from django.db.models import Avg
+from django.db.models import Avg, Count
 
 User = get_user_model()
 
@@ -60,7 +60,7 @@ class Product(models.Model):
 
     def average_rating(self) -> float:
         return Rating.objects.filter(product=self).aggregate(Avg("rating"))["rating__avg"] or 0
-    
+
     def __str__(self):
         return self.title
     
