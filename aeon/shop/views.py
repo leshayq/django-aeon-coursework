@@ -1,6 +1,6 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Category, ProductProxy, Product, Rating
 from django.views.generic.list import ListView
@@ -9,7 +9,11 @@ from django.views import View
 from django.views.generic.detail import DetailView
 from common.services import all_objects, filter_objects
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from .filters import check_filtering
+from django.template import loader
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
 
 
 # class IndexView(ListView):
@@ -85,18 +89,20 @@ class ProductDetailView(DetailView):
 class CategoryListView(ListView):
     model = ProductProxy
     template_name = 'shop/category_list.html'
-    context_object_name = 'category_products'
+    context_object_name = 'products'
 
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
         queryset = super().get_queryset().filter(category=category)
 
-        filters, ordering = check_filtering(self.request)
+        filters, sort_option = check_filtering(self.request)
         if filters:
             queryset = queryset.filter(**filters)
 
-        if ordering:
-            queryset = queryset.order_by(ordering)
+        if sort_option == 'popularity':
+            queryset = queryset.annotate(rating_count=Count('rating')).order_by('-rating_count', 'title')
+        elif sort_option:
+            queryset = queryset.order_by(sort_option)
 
         queryset = IndexView.get_products_with_rating(self, queryset)
         return queryset

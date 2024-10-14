@@ -1,3 +1,4 @@
+
 def check_filtering(request):
     filters = {}
     ordering = None
@@ -8,7 +9,9 @@ def check_filtering(request):
 
     brands = request.GET.getlist('brand_key')
     
-    ordering = request.GET.get('sort_option')
+    sort_option = request.GET.get('sort_option')
+
+
     try:
         if low_price:
             filters['price__gte'] = float(low_price)
@@ -21,4 +24,4 @@ def check_filtering(request):
     except ValueError:
         pass 
 
-    return (filters, ordering)
+    return (filters, sort_option)
