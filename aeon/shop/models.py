@@ -23,6 +23,7 @@ class Category(models.Model):
     name = models.CharField('Категорія', max_length=250, db_index=True)
     slug = models.SlugField('URL', max_length=250, unique=True, null=False, editable=True)
     created_at = models.DateTimeField('Дата створення', auto_now_add=True)
+    icon = models.ImageField('Іконка', null=True, blank=True, upload_to='icons/')
 
     class Meta:
         unique_together = (['slug'])
@@ -37,8 +38,8 @@ class Category(models.Model):
             self.slug = slugify(rand_slug() + '-pickBetter' + self.name)
         super(Category, self).save(*args, **kwargs)
     
-    # def get_absolute_url(self):
-    #     return reverse("shop:category_list", args=[str(self.slug)])
+    def get_absolute_url(self):
+        return reverse("shop:category_list", args=[str(self.slug)])
     
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')

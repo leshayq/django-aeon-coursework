@@ -1,4 +1,5 @@
 {% load static %}
+{% load shop_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +25,22 @@
 
         <div class="menu-searchbar">
             <div class="catalog">
-                <button class="catalog-button"><i class="fa-solid fa-bars"></i> Каталог</button>
+                <div class='dropdown'>
+                    <button class="catalog-button" type="button" data-toggle="dropdown"><i class="fa-solid fa-bars"></i> Каталог</button>
+                    <ul class="dropdown-menu">
+                        {% for category in categories %}
+                        <li class="dropdown-submenu">
+                                <img src='{{ category.icon.url }}' width='30' height='30'>
+                                <a class="test" tabindex="-1" href="#">{{ category.name }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a tabindex="-1" href="{{ category.get_absolute_url }}">{{ category.name|get_category_content|safe }}</a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
     
             <div class="searchbar">
@@ -78,6 +94,15 @@
 
         }
     </script>
+    <script>
+        $(document).ready(function(){
+          $('.dropdown-submenu a.test').on("click", function(e){
+            $(this).next('ul').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+          });
+        });
+        </script>        
 </body>
 </html>
 
