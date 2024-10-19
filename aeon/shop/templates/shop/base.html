@@ -30,12 +30,28 @@
                     <ul class="dropdown-menu">
                         {% for category in categories %}
                         <li class="dropdown-submenu">
-                                <img src='{{ category.icon.url }}' width='30' height='30'>
-                                <a class="test" tabindex="-1" href="#">{{ category.name }} <span class="caret"></span></a>
+                            <img src='{{ category.icon.url }}' width='30' height='30'>
+                            <a class="test" tabindex="-1" href="#">{{ category.name }} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a tabindex="-1" href="{{ category.get_absolute_url }}">{{ category.name|get_category_content|safe }}</a>
-                                </li>
+                                {% with category.name|get_category_content as category_content %}
+                                    {% if category_content.items %}
+                                        {% for subcategory, subitems in category_content.items %}
+                                            <li class='catalog-category-elem'>
+                                                <strong>{{ subcategory }}:</strong>
+                                                <hr>
+                                                    <ul>
+                                                        {% for brand, brand_url in subitems.items %}
+                                                            <li>
+                                                                <a href="{{ brand_url }}">{{ brand }}</a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                            </li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li><a tabindex="-1" href="#">Немає даних</a></li>
+                                    {% endif %}
+                                {% endwith %}
                             </ul>
                         </li>
                         {% endfor %}
