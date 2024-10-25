@@ -6,6 +6,7 @@ from django.urls import reverse
 from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
 from django.db.models import Avg, Count
+from users.models import CustomUser
 
 User = get_user_model()
 
@@ -45,7 +46,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     title = models.CharField('Назва', max_length=250)
     brand = models.CharField('Бренд', max_length=250)
-    color = ColorField(default='#FF0000', null=False, blank=False)
+    color = ColorField(default='#FF0000', null=False, blank=True)
     description = models.TextField('Опис', blank=True)
     slug = models.SlugField('URL', max_length=250)
     price = models.DecimalField('Ціна', max_digits=10, decimal_places=2, default=99.99)
@@ -86,3 +87,10 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.product.title}: {self.rating}"
+    
+class WishList(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(ProductProxy, blank=True)
+
+    def get_total_products(self):
+        return self.products.count()

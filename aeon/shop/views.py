@@ -2,7 +2,7 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Category, ProductProxy, Product, Rating
+from .models import Category, ProductProxy, Product, Rating, WishList
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 from django.views import View
@@ -14,19 +14,7 @@ from .filters import check_filtering
 from django.template import loader
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
-
-
-# class IndexView(ListView):
-#     model = ProductProxy
-#     template_name = 'shop/index.html'
-#     context_object_name = 'index_products'
-
-#     def get_queryset(self) -> QuerySet[Any]:
-#         products = ProductProxy.objects.all()
-#         for product in products:
-#             rating = Rating.objects.filter(product=product, user=request.user).first()
-#             product.user_rating = rating.rating if rating else 0
-#         return render(request, "index.html", {"posts": posts})
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 class IndexView(TemplateView):
     template_name = "shop/index.html"
@@ -43,21 +31,8 @@ class IndexView(TemplateView):
         context['products'] = self.get_products_with_rating(products)
         return context
 
-# def index(request):
-#     products = ProductProxy.objects.all()
-#     for product in products:
-#         rating = Rating.objects.filter(product=product, user=request.user).first()
-#         product.user_rating = rating.rating if rating else 0
-#     return render(request, "shop/index.html", {"products": products})
 
-# @login_required()
-# def rate(request: HttpRequest, product_id: int, rating: int) -> HttpResponse:
-#     product = ProductProxy.objects.get(id=product_id)
-#     Rating.objects.filter(product=product, user=request.user).delete()
-#     product.rating_set.create(user=request.user, rating=rating)
-#     return index(request)
-
-class RateView(View):
+class RateView(View, PermissionRequiredMixin):
     def get(self, request, product_id, rating):
         product = ProductProxy.objects.get(id=product_id)
         Rating.objects.filter(product=product, user=request.user).delete()
@@ -127,4 +102,28 @@ class CategoryListView(ListView):
         context['show_all_brands'] = show_all_brands
         
         return context
+
+class WishListView(ListView, PermissionRequiredMixin):
+    template_name = 'shop/wishlist.html'
+    model = WishList
+    context_object_name = 'wishlister'
+
+    def get_queryset(self):
+        raw, created = WishList.objects.get_or_create(user=self.request.user)
+        queryset = raw.products.all()
+        return queryset
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['title'] = 'Список бажань'
+        return context
+
+@login_required(login_url='/users/login/')
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(ProductProxy, id=product_id)
+    if product in WishList.objects.get(user=request.user).products.all():
+        return HttpResponse(status=204)
+    raw, created = WishList.objects.get_or_create(user=request.user)
+    raw.products.add(product)
+    return redirect('shop:wishlist')

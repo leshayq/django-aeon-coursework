@@ -801,3 +801,71 @@ input[type="number"]:focus {
     height: auto;
     object-fit: cover;
 }
+.wishlist-row {
+    display: flex;
+    align-items: center;
+}
+.wishlist-view {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.wishlist-image img {
+    width: 100px;
+    height: auto;
+    border-radius: 8px;
+    margin-right: 15px;
+}
+
+.wishlist-info {
+    flex-grow: 1;
+    padding: 0 15px;
+}
+
+.wishlist-info h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.wishlist-info p {
+    font-size: 14px;
+    color: #666;
+}
+
+.wishlist-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-input {
+    width: 40px;
+    text-align: center;
+}
+
+.wishlist-price {
+    text-align: right;
+}
+
+.new-price {
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.wishlist {
+    padding: 15px !important;
+}
+
+.wishlist {
+    margin-top: 20px;
+    padding: 15px !important;
+}
+
+.delete-item {
+    padding-left: 15px; /* Отступ слева, чтобы крестик не прилипал */
+    cursor: pointer; /* Указываем, что элемент кликабелен */
+    font-size: 20px; /* Увеличиваем размер крестика */
+}
