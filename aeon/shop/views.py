@@ -14,7 +14,9 @@ from .filters import check_filtering
 from django.template import loader
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.template.loader import render_to_string
+from users.forms import UserLoginForm
 
 class IndexView(TemplateView):
     template_name = "shop/index.html"
@@ -32,7 +34,7 @@ class IndexView(TemplateView):
         return context
 
 
-class RateView(View, PermissionRequiredMixin):
+class RateView(View, LoginRequiredMixin):
     def get(self, request, product_id, rating):
         product = ProductProxy.objects.get(id=product_id)
         Rating.objects.filter(product=product, user=request.user).delete()
@@ -103,10 +105,25 @@ class CategoryListView(ListView):
         
         return context
 
-class WishListView(ListView, PermissionRequiredMixin):
+class WishListView(LoginRequiredMixin, ListView):
     template_name = 'shop/wishlist.html'
     model = WishList
     context_object_name = 'wishlister'
+
+    login_url = '/users/login/'
+    redirect_field_name = 'redirect_to'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            if request.headers.get("HX-Request"):
+                form = UserLoginForm()
+                context = {'form': form}
+                html = render_to_string('users/login.html', context=context, request=request)
+                return HttpResponse(html, content_type="text/html")
+            else:
+                return redirect(f"{self.login_url}?{self.redirect_field_name}={request.path}")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         raw, created = WishList.objects.get_or_create(user=self.request.user)
@@ -119,11 +136,26 @@ class WishListView(ListView, PermissionRequiredMixin):
         context['title'] = 'Список бажань'
         return context
 
+
+#wishlist actions functions
 @login_required(login_url='/users/login/')
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(ProductProxy, id=product_id)
-    if product in WishList.objects.get(user=request.user).products.all():
+
+    try:
+        wishlist = WishList.objects.get(user=request.user)
+    except WishList.DoesNotExist:
+        wishlist = WishList.objects.create(user=request.user)
+
+    if product in wishlist.products.all():
         return HttpResponse(status=204)
-    raw, created = WishList.objects.get_or_create(user=request.user)
-    raw.products.add(product)
+
+    wishlist.products.add(product)
+    return redirect('shop:wishlist')
+
+@login_required(login_url='/users/login/')
+def remove_from_wishlist(request, product_id):
+    product = get_object_or_404(ProductProxy, id=product_id)
+    wishlister = WishList.objects.get(user=request.user).products.remove(product)
+
     return redirect('shop:wishlist')

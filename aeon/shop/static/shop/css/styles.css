@@ -523,17 +523,38 @@ body {
     font-size: 16px; 
     cursor: pointer;
     width: 100%;
-    margin-bottom: 20px;
     font-weight: 600;
 }
 
+.red-button:hover {
+    background-color: var(--hover-red-color);
+}
+
 .white-button {
+    margin-top: 20px;
     background-color: white;
     color: #000;
     border: 1px solid #5c5c5c;
     margin-bottom: 0px;
 }
 
+
+.white-button:hover {
+    background-color: #f1f1f1;
+}
+
+.button-link {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.button-link svg {
+    margin-right: 10px;
+}
 .detail-price {
     width: 100%;
     display: flex;
@@ -801,71 +822,78 @@ input[type="number"]:focus {
     height: auto;
     object-fit: cover;
 }
-.wishlist-row {
-    display: flex;
-    align-items: center;
-}
-.wishlist-view {
+
+.wishlist-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-
-.wishlist-image img {
-    width: 100px;
-    height: auto;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    margin-right: 15px;
+    padding: 24px;
+    max-width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    position: relative;
 }
 
+/* Стиль для изображения товара */
+.wishlist-item img {
+    width: 120px;
+    height: 120px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+/* Контейнер для текста */
 .wishlist-info {
-    flex-grow: 1;
-    padding: 0 15px;
+    flex: 1;
+    margin-left: 16px;
 }
 
-.wishlist-info h2 {
-    font-size: 18px;
+.wishlist-info h3 {
     margin: 0;
+    font-size: 1.5rem;
+    color: #333;
 }
 
 .wishlist-info p {
-    font-size: 14px;
+    margin: 4px 0 0;
+    font-size: 1.1rem;
     color: #666;
 }
 
-.wishlist-quantity {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.quantity-input {
-    width: 40px;
-    text-align: center;
-}
-
-.wishlist-price {
+/* Цена и кнопка добавить в корзину */
+.wishlist-actions {
     text-align: right;
 }
 
-.new-price {
-    color: red;
+.wishlist-actions .price {
     font-weight: bold;
-    font-size: 20px;
+    color: var(--main-red-color);
+    font-size: 2rem;
 }
 
-.wishlist {
-    padding: 15px !important;
+.wishlist-actions > .small-add-to-cart {
+    margin-top: 15px;
 }
 
-.wishlist {
-    margin-top: 20px;
-    padding: 15px !important;
+.remove-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 1.6rem;
+    color: #aaa;
+    cursor: pointer;
 }
 
-.delete-item {
-    padding-left: 15px; /* Отступ слева, чтобы крестик не прилипал */
-    cursor: pointer; /* Указываем, что элемент кликабелен */
-    font-size: 20px; /* Увеличиваем размер крестика */
+.remove-icon:hover {
+    color: #e74c3c;
+}
+
+.detail-rating {
+    padding: 0 0 10px 20px;
+}
+
+.detail-rating span {
+    margin: 0 20px 0 0;
 }

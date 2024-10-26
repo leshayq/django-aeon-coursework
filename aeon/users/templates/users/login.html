@@ -1,4 +1,5 @@
 <form method="post" hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
     <div class="form">
     <h5 class="modal-title">Вхiд</h5>
         {% for field in form %}

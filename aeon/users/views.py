@@ -4,10 +4,16 @@ from .models import CustomUser
 from .forms import UserLoginForm, UserRegisterForm
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
+from django.template.loader import render_to_string
+from django.urls import reverse
 
 
 def login_user(request):
     form = UserLoginForm()
+    next_url = request.GET.get('next') or request.session.get('next_url') or reverse('shop:main')
+    
+    if request.GET.get('next'):
+        request.session['next_url'] = request.GET.get('next')
 
     if request.user.is_authenticated:
         return redirect('shop:main')
@@ -21,13 +27,18 @@ def login_user(request):
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponse(status=204)
+            
+            next_url = request.session.pop('next_url', reverse('shop:main'))
+            return HttpResponse(f"<script>window.location.href='{next_url}';</script>")
+
         else:
             messages.error(request, "Ім'я користувача або пароль невірні. Спробуйте ще раз.")
+    
     context = {
         'form': form,
     }
     return render(request, 'users/login.html', context)
+
 
 def register_user(request):
     if request.user.is_authenticated:
