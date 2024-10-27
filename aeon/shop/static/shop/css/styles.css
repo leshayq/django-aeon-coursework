@@ -293,6 +293,12 @@ body {
     background-color: var(--main-red-color);
     border-radius: 8px;
 }
+.small-add-to-cart button {
+    outline: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
 
 .price-and-cart {
     display: flex;
@@ -884,6 +890,9 @@ input[type="number"]:focus {
     font-size: 1.6rem;
     color: #aaa;
     cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
 }
 
 .remove-icon:hover {
@@ -896,4 +905,45 @@ input[type="number"]:focus {
 
 .detail-rating span {
     margin: 0 20px 0 0;
+}
+
+.qty-container {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 120px;
+}
+
+.qty-input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+    padding: 8px;
+}
+
+.qty-btn {
+    background-color: #f0f0f0;
+    border: none;
+    width: 32px; 
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex: 1; 
+}
+
+.qty-btn:hover {
+    background-color: #e0e0e0; 
+}
+
+.qty-btn-increase {
+    border-right: 1px solid #ccc;
+}
+
+.qty-btn-decrease {
+    border-left: 1px solid #ccc;
 }

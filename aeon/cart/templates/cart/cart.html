@@ -1,0 +1,41 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="top-sales category-sales">
+    <h1>Корзина</h1>
+</div>
+{% for item in cart %}
+{% with product=item.product %}
+<div class="wishlist-item">
+    <img src="{{ product.image.url }}" alt="Product Image">
+    <div class="wishlist-info">
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.brand }}</p>
+    </div>
+    <div class="wishlist-actions">
+        <span class="price">₴{{ product.price }}</span><br>
+        <div class="qty-container">
+            <button class="qty-btn qty-btn-increase" onclick="changeQuantity(1, {{ item.product.id }})">+</button>
+            <input type="number" id="qtyInput{{ item.product.id }}" value="{{ item.qty }}" min="1" max="100" class="qty-input" oninput="updateCart({{ item.product.id }})">
+            <button class="qty-btn qty-btn-decrease" onclick="changeQuantity(-1, {{ item.product.id }})">-</button>
+        </div>
+    </div>
+        <button 
+            class="remove-icon"
+            id="cart-delete-button"
+            type="button"
+            data-index="{{ product.id }}"
+            >&times;
+        </button>
+</div>
+{% endwith %}
+{% empty %}
+<p class="faded-text">Корзина порожня.</p>
+{% endfor %}
+
+{% if cart.get_total_price != 0 %}
+<div class="top-sales category-sales" id="total">
+    <h1>Загальна сума: {{ cart.get_total_price }}₴</h2>
+</div>
+{% endif %}
+
+{% endblock content %}

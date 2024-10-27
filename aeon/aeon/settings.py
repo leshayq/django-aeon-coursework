@@ -20,9 +20,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #user apps
     'shop.apps.ShopConfig',
     'users.apps.UsersConfig',
-    
+    'cart.apps.CartConfig',
+
+    #libraries
     'colorfield',
 ]
 
@@ -99,3 +102,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+
