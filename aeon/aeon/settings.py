@@ -27,6 +27,7 @@ INSTALLED_APPS = [
 
     #libraries
     'colorfield',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

@@ -28,9 +28,10 @@ class IndexView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        products = ProductProxy.objects.all()
+        products = ProductProxy.objects.all().annotate(rating_count=Count('rating')).order_by('-rating_count', 'title')
 
         context['products'] = self.get_products_with_rating(products)
+        context['title'] = 'AEON| Магазин електронiки'
         return context
 
 
@@ -159,3 +160,10 @@ def remove_from_wishlist(request, product_id):
     wishlister = WishList.objects.get(user=request.user).products.remove(product)
 
     return redirect('shop:wishlist')
+
+def search_items(request):
+    q = request.GET.get('q') if request.GET.get('q') is not None else ''
+    
+    items = ProductProxy.objects.filter(title__icontains=q)[:7]
+
+    return render(request, 'shop/search_results.html', {'items': items})

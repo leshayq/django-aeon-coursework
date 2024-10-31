@@ -1,4 +1,5 @@
 {% extends 'shop/base.html' %}
+{% load humanize %}
 {% block content %}
 <div class="top-sales category-sales">
     <h1>Корзина</h1>
@@ -12,7 +13,7 @@
         <p>{{ product.brand }}</p>
     </div>
     <div class="wishlist-actions">
-        <span class="price">₴{{ product.price }}</span><br>
+        <span class="price">₴{{ product.price|intcomma }}</span><br>
         <div class="qty-container">
             <button class="qty-btn qty-btn-increase" onclick="changeQuantity(1, {{ item.product.id }})">+</button>
             <input type="number" id="qtyInput{{ item.product.id }}" value="{{ item.qty }}" min="1" max="100" class="qty-input" oninput="updateCart({{ item.product.id }})">
@@ -34,7 +35,7 @@
 
 {% if cart.get_total_price != 0 %}
 <div class="top-sales category-sales" id="total">
-    <h1>Загальна сума: {{ cart.get_total_price }}₴</h2>
+    <h1>Загальна сума: {{ cart.get_total_price|intcomma }}₴</h2>
 </div>
 {% endif %}
 

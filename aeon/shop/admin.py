@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product, Rating
+from .models import Category, Product, Rating, ImageSlider
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -24,4 +24,8 @@ class RatingAdmin(admin.ModelAdmin):
     ordering = ('product',)
     list_filter = ('rating', 'product')
 
-
+@admin.register(ImageSlider)
+class ImageSliderAdmin(admin.ModelAdmin):
+    list_display = ('product', 'created_at')
+    ordering = ('created_at',)
+    list_filter = ('created_at',)

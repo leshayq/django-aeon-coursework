@@ -60,10 +60,20 @@
             </div>
     
             <div class="searchbar">
-                <input type="text" placeholder="Знайти...">
+                <input 
+                    type="text" 
+                    placeholder="Знайти..."
+                    name="q"
+                    hx-get="{% url 'shop:search_items' %}"
+                    hx-trigger="keyup changed delay:150ms"
+                    hx-target="#search-results">
                 <span>
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
+            </div>
+
+            <div id="search-results">
+                {% include 'shop/search_results.html' %}
             </div>
         </div>
 
@@ -117,125 +127,20 @@
     <script src='{% static "shop/js/bootstrap.js" %}'></script>
     <script src='{% static "shop/js/dialog.js" %}'></script>
     <script src='{% static "shop/js/sort.js" %}'></script>
-    <script>
-        function showMoreBrands() {
-            var moreBrands = document.getElementById("more-brands");
-            var button = document.getElementById("show-more-brands");
+    <script src="{% static 'shop/js/show_brands.js' %}"></script>
+    <script src="{% static 'shop/js/dropdown.js' %}"></script>
     
-            if (moreBrands.style.display === "none") {
-                moreBrands.style.display = "block";
-                button.style.display = 'none';
-            }
+    <script>
+        var csrfToken = '{{ csrf_token }}';
+        var addToCartUrl = "{% url 'cart:add_to_cart' %}";
+        var deleteFromCartUrl = "{% url 'cart:delete_from_cart' %}";
+        var updateCartUrl = "{% url 'cart:update_cart' %}";
+    </script>
+    <script src="{% static 'shop/js/cart.js' %}"></script>
 
-        }
-    </script>
-    <script>
-        $(document).ready(function(){
-          $('.dropdown-submenu a.test').on("click", function(e){
-            $(this).next('ul').toggle();
-            e.stopPropagation();
-            e.preventDefault();
-          });
-        });
-    </script>
-    <script>
-        $(document).on('click', '#add-button', function(e) {
-            e.preventDefault();
     
-            $.ajax({
-                type: 'POST',
-                url: '{% url "cart:add_to_cart" %}',
-                data: {
-                    product_id: $('#add-button').val(),
-                    product_qty: 1,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    action: 'post',
-                },
-                success: function(response) {
-                console.log('Product added:', response);
-                window.location.href = "/cart/";
-                },
-                error: function(error) {
-                    console.log('Error:', error);
-                }
-            });
-        });
-    </script>
-
-    <script>
-    $(document).on('click', '#cart-delete-button', function(e) {
-        e.preventDefault();
-
-        $.ajax({
-            type: 'POST',
-            url: '{% url "cart:delete_from_cart" %}',
-            data: {
-                product_id: $(this).data('index'),
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                action: 'post',
-            },
-            success: function(response) {
-                document.getElementById('total').innerHTML = '<h1>Загальна сума: ' + response.total + '₴</h1>';
-                location.reload()
-            },
-            error: function(error) {
-                console.log('error')
-            }
-
-        })
-    })
-
-    </script>
-    <script>
-        function changeQuantity(amount) {
-            const input = document.getElementById("qtyInput");
-            let currentQty = parseInt(input.value);
-        
-            if (!isNaN(currentQty)) {
-                const newQty = currentQty + amount;
-                if (newQty >= input.min && newQty <= input.max) {
-                    input.value = newQty;
-                }
-            }
-        }
-    </script>
-
-    <script>
-        function changeQuantity(amount, productId) {
-            const input = document.getElementById(`qtyInput${productId}`);
-            let currentQty = parseInt(input.value);
-
-            if (!isNaN(currentQty)) {
-                const newQty = currentQty + amount;
-                if (newQty >= input.min && newQty <= input.max && newQty) {
-                    input.value = newQty;
-                    updateCart(productId); 
-                }
-            }
-        }
-        function updateCart(productId) {
-            const input = document.getElementById(`qtyInput${productId}`);
-            const productQty = parseInt(input.value);
-
-            $.ajax({
-                type: 'POST',
-                url: '{% url "cart:update_cart" %}',
-                data: {
-                    product_id: productId,
-                    product_qty: productQty,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    action: 'post',
-                },
-                success: function(response) {
-                    console.log('Cart updated:', response);
-                    document.getElementById('total').innerHTML = '<h1>Загальна сума: ' + response.total + '₴</h1>';
-                },
-                error: function(error) {
-                    console.log('Error:', error);
-                }
-            });
-        }
-    </script>
+    <script src="{% static 'shop/js/show_live_search.js' %}"></script>
+    <script src="{% static 'shop/js/focus_in_out_live_search.js' %}"></script>
 </body>
 </html>
 

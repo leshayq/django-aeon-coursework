@@ -1,0 +1,15 @@
+{% for item in items %}
+<a href="{{ item.get_absolute_url }}">
+<div class="product-item">
+    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+    <div class="product-item-details">
+        <div>
+            <p class="product-item-title">{{ item.title }}</p>
+        </div>
+        <div>
+            <p class="product-item-price">{{ item.price }}₴</p>
+        </div>
+    </div>
+</div>
+</a>
+{% endfor %}

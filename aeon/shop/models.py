@@ -94,3 +94,7 @@ class WishList(models.Model):
 
     def get_total_products(self):
         return self.products.count()
+    
+class ImageSlider(models.Model):
+    product = models.ForeignKey(ProductProxy, on_delete=models.CASCADE)
+    created_at = models.DateTimeField('Дата створення', auto_now_add=True)
