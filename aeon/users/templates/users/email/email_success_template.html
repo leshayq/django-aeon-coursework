@@ -1,0 +1,18 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="card">
+    <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#ff4747" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 8l-6 6-3-3 1.41-1.41L11 13.17l4.59-4.59L17 10z"/></svg>
+    </div>
+    <h1>Ваш email підтверджений!</h1>
+    <p>Тепер ви можете скористатися всіма функціями нашого сайту. Ви будете перенаправлені на головну сторінку через 5 секунд.</p>
+    <a href="{% url 'shop:main' %}" class="button">Головна сторінка</a>
+</div>
+
+ <!-- script for redirecting user to main page after 5 seconds -->
+<script>
+    setTimeout(function() {
+        window.location.href = '{% url "shop:main" %}'; 
+    }, 5000);
+</script>
+{% endblock content %}

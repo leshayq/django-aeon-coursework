@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.urls import reverse
-
+from django_email_verification import send_email
 
 def login_user(request):
     form = UserLoginForm()
@@ -32,7 +32,7 @@ def login_user(request):
             return HttpResponse(f"<script>window.location.href='{next_url}';</script>")
 
         else:
-            messages.error(request, "Ім'я користувача або пароль невірні. Спробуйте ще раз.")
+            messages.error(request, "Електронна пошта або пароль невірні. Спробуйте ще раз.")
     
     context = {
         'form': form,
@@ -56,9 +56,13 @@ def register_user(request):
 
             user.is_active = False
             user.save()
+            send_email(user)
             
-            return redirect('shop:main')
+            return HttpResponse(f"<script>window.location.href='/users/email_verification/';</script>")
     else:
         form = UserRegisterForm()
 
     return render(request, "users/register.html", {"form":form})
+
+def email_verification(request):
+    return render(request, 'users/email/email_verification.html')

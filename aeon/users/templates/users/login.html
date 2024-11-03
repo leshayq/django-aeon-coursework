@@ -2,23 +2,35 @@
     <input type="hidden" name="next" value="{{ request.GET.next }}">
     <div class="form">
     <h5 class="modal-title">Вхiд</h5>
+
+        {% if form.non_field_errors %}
+        <div class="invalid-feedback">{{ form.non_field_errors }}</div><br>
+        {% endif %}
+
         {% for field in form %}
         <div class='form-element'>
             {{ field.label_tag }}
             {{ field }}
-            {% for error in field.errors %}
-                <div class="invalid-feedback">{{ error }}</div>
-            {% endfor %}
         </div>
         {% endfor %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-danger"><p class="invalid-feedback">{{ message }}</p></div>
+                {% endfor %}
+            {% endif %}
+        <div class="reg-log forgot-password">
+            <a href='{% url "users:password_reset" %}'>Забули пароль?</a>
+        </div>
         <input type="submit" value="Вхід" class="auth-button">
 
         <div class='reg-log'>
+            <p class="faded-text">
             Ще не маєте акаунту?
             <a  
             hx-get='{% url "users:register" %}' 
             hx-target="#dialog">Зареєструватися   
             </a>
+            </p>
         </div>
     </div>
 </form>

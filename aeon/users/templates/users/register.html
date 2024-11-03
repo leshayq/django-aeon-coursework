@@ -7,7 +7,7 @@
             {{ field.label_tag }}
             {{ field }}
             {% for error in field.errors %}
-                <div class="invalid-feedback">{{ error }}</div>
+                <div class="invalid-feedback">{{ error }}</div><br>
             {% endfor %}
         </div>
         {% endfor %}

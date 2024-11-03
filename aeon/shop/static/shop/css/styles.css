@@ -111,6 +111,102 @@ body {
     width: auto;
     height: auto;
 } */
+.invalid-feedback {
+    margin-top: 10px;
+    color: var(--main-red-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: auto;
+}
+
+.alert-danger {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.errorlist {
+    list-style: none;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.forgot-password a {
+    color: #5c5c5c !important;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    color: var(--hover-red-color) !important;
+}
+
+.card {
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.6s ease-out;
+    margin: auto;
+}
+
+.new-password-form {
+    max-width: 700px;
+}
+.card .icon {
+    margin-bottom: 20px;
+}
+
+.card h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+.reset-elem {
+    margin-bottom: 20px;
+}
+
+.reset-elem label {
+    float: left;
+}
+
+.email-button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: var(--main-red-color);
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.email-button:hover {
+    background-color: var(--hover-red-color);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .slider-container {
     display: block;
     overflow: hidden;
@@ -590,12 +686,15 @@ animation-play-state: paused;
     transition: color ease 0.4s;
 }
 
-.faded-text {
+.faded-text, .helptext {
     color: #5c5c5c;
     font-weight: 400;
     margin-bottom: 10px;
 }
 
+.helptext ul {
+    list-style: none;
+}
 .detail-buying ul {
     display: flex;
     flex-direction: column !important;
@@ -640,7 +739,7 @@ animation-play-state: paused;
 
 .form h5 {
     text-align: center;
-    /* margin: 10px 0 20px; */
+
     font-size: 25px;
 }
 
@@ -650,7 +749,7 @@ animation-play-state: paused;
 
 .form .form-element input[type='text'],
 .form .form-element input[type='password'],
-.form .form-element input[type='email'] {
+.form .form-element input[type='email'], #id_new_password1, #id_new_password2, #id_email {
     margin-top: 5px;
     display: block;
     width: 100%;
