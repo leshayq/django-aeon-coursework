@@ -11,63 +11,17 @@
     <p>Великі <span>знижки</span></p>
 </div>
 
-<div class="slider-body">
-    <div class="slider">
-        <div class="slide-track">
-            <div class='slide'>
-                <img src="{% static 'shop/images/hyperx_quadcast_s_1_front_1600x.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/221026160013651115 (1).png'%}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/309701_0_yw5vjg.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/MRXV3_6_is.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/pngtree-airpods-png-image_9149137.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/xiaomi-redmi-note-12-pro-plus-5g-mockup-free-png.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/pngtree-apple-vision-png-image_9212583.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/jbl-tune-670nc-headphones-purple-hero-singapore-585692_ce22b731-94ab-41b5-a0a3-e3b785e96766-627304_2000x.png' %}" width="300" height="300">
-            </div>
-
-
-            <div class='slide'>
-                <img src="{% static 'shop/images/hyperx_quadcast_s_1_front_1600x.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/221026160013651115 (1).png'%}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/309701_0_yw5vjg.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/MRXV3_6_is.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/pngtree-airpods-png-image_9149137.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/xiaomi-redmi-note-12-pro-plus-5g-mockup-free-png.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/pngtree-apple-vision-png-image_9212583.png' %}" width="300" height="300">
-            </div>
-            <div class='slide'>
-                <img src="{% static 'shop/images/jbl-tune-670nc-headphones-purple-hero-singapore-585692_ce22b731-94ab-41b5-a0a3-e3b785e96766-627304_2000x.png' %}" width="300" height="300">
-            </div>
-            
-        </div>
+<div class="slider-container">
+    <div class="slider-track">
+      {% for slide in sliding_images %}
+        <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.image.url }}" alt="{{ slide.title }}"></a>
+      {% endfor %}
+      {% for slide in sliding_images %}
+        <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.image.url }}" alt="{{ slide.title }}"></a>
+      {% endfor %}
     </div>
-</div>
+  </div>    
+
 
 <div class="top-sales">
     <p>Лідери <span>продажу</span></p>

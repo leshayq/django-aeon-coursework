@@ -2,7 +2,7 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Category, ProductProxy, Product, Rating, WishList
+from .models import Category, ProductProxy, Product, Rating, WishList, ImageSlider
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 from django.views import View
@@ -28,9 +28,11 @@ class IndexView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        products = ProductProxy.objects.all().annotate(rating_count=Count('rating')).order_by('-rating_count', 'title')
+        products = ProductProxy.objects.all().annotate(rating_count=Count('rating')).order_by('-rating_count', 'title')[:20]
+        sliding_images = ImageSlider.objects.all().order_by('-created_at')[:8]
 
         context['products'] = self.get_products_with_rating(products)
+        context['sliding_images'] = sliding_images  
         context['title'] = 'AEON| Магазин електронiки'
         return context
 
