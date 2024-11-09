@@ -7,6 +7,15 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django_email_verification import send_email
+from cart.cart import Cart
+from payment.forms import ShippingAddressForm
+from payment.models import Order, OrderItem, ShippingAddress
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from .forms import UserSettingsForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import logout
+from payment.models import Order, OrderItem
 
 def login_user(request):
     form = UserLoginForm()
@@ -37,7 +46,13 @@ def login_user(request):
     context = {
         'form': form,
     }
-    return render(request, 'users/login.html', context)
+    if request.META.get('HTTP_HX_REQUEST'):
+        print("HTMX is available")
+        return render(request, 'users/login.html', context)
+
+    else:
+        print("HTMX is not available")
+        return render(request, 'users/login_no_bootstrap.html', context)
 
 
 def register_user(request):
@@ -64,5 +79,62 @@ def register_user(request):
 
     return render(request, "users/register.html", {"form":form})
 
+@login_required(login_url='/users/login/')
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('shop:main'))
+
 def email_verification(request):
     return render(request, 'users/email/email_verification.html')
+
+@login_required(login_url='/users/login/')
+def profile_view(request):
+    return render(request, 'users/profile.html')
+
+@login_required(login_url='/users/login/')
+def orders_view(request):
+    context = {}
+    context['orders'] = Order.objects.filter(user=request.user)
+    return render(request, 'users/orders.html')
+
+@login_required(login_url='/users/login/')
+def shipping_view(request):
+    try:
+        shipping_address = ShippingAddress.objects.get(user=request.user)
+    except ShippingAddress.DoesNotExist:
+        shipping_address = None
+
+    form = ShippingAddressForm(instance=shipping_address)
+
+    if request.method == 'POST':
+        form = ShippingAddressForm(request.POST, instance=shipping_address)
+        if form.is_valid():
+            shipping_address = form.save(commit=False)
+            shipping_address.user = request.user
+            shipping_address.save()
+            form.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+    return render(request, 'users/shipping.html', {'form': form})
+
+@login_required(login_url='/users/login/')
+def settings_view(request):
+    if request.method == 'POST':
+        print('post')
+        form = UserSettingsForm(request.POST, instance=request.user)
+        if form.is_valid():
+            print('valid')
+            user = form.save(commit=False)
+            
+            password1 = form.cleaned_data.get("password1")
+            if password1:
+                user.set_password(password1)
+                print('password changed')
+                update_session_auth_hash(request, user)
+            print('detect')
+            user.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+
+    else:
+        form = UserSettingsForm(instance=request.user)
+    
+    return render(request, 'users/settings.html', {'form': form})

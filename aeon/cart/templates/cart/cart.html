@@ -11,14 +11,14 @@
     <div class="wishlist-info">
         <h3>{{ product.title }}</h3>
         <p>{{ product.brand }}</p>
-    </div>
-    <div class="wishlist-actions">
-        <span class="price">₴{{ product.price|intcomma }}</span><br>
         <div class="qty-container">
             <button class="qty-btn qty-btn-increase" onclick="changeQuantity(1, {{ item.product.id }})">+</button>
             <input type="number" id="qtyInput{{ item.product.id }}" value="{{ item.qty }}" min="1" max="100" class="qty-input" oninput="updateCart({{ item.product.id }})">
             <button class="qty-btn qty-btn-decrease" onclick="changeQuantity(-1, {{ item.product.id }})">-</button>
         </div>
+    </div>
+    <div class="wishlist-actions">
+        <span class="price">₴{{ product.price|intcomma }}</span><br>
     </div>
         <button 
             class="remove-icon"
@@ -37,6 +37,9 @@
 <div class="top-sales category-sales" id="total">
     <h1>Загальна сума: {{ cart.get_total_price|intcomma }}₴</h2>
 </div>
+
+<a href='{% url "payment:checkout" %}' class="email-button checkout-button">До сплати</a>
 {% endif %}
+
 
 {% endblock content %}

@@ -1,0 +1,8 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="message-box">
+    <h1>Оплата пройшла успішно!</h1>
+    <p>Дякуємо за ваше замовлення. Ми зв'яжемося з вами найближчим часом для підтвердження доставки.</p>
+    <a href="{% url 'shop:main' %}">Головна сторінка</a>
+</div>
+{% endblock content %}

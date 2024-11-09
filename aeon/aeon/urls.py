@@ -10,6 +10,7 @@ urlpatterns = [
     path('verify/', include('django_email_verification.urls')),
     path('email/', include(email_urls)),  # connect them to an arbitrary path
     path('cart/', include('cart.urls', namespace='cart')),
+    path('payment/', include('payment.urls', namespace='payment')),
     path('', include('shop.urls', namespace='shop')),
 ]
 

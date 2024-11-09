@@ -1,0 +1,117 @@
+{% extends 'shop/base.html' %}
+{% load humanize %}
+{% block content %}
+<h1 class="checkout-header">Замовлення</h1>
+<a href="{% url 'cart:cart_view' %}" class="return-button">
+    <span class="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8.854 1.646a.5.5 0 0 1 0 .708L3.707 7.5H14.5a.5.5 0 0 1 0 1H3.707l5.147 5.146a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+      </svg>
+    </span>
+    Повернутись до кошику
+  </a>
+
+        {% for item in cart_items %}
+        <div class="cart-item">
+            <img src="{{ item.product.image.url }}" alt="Product Image">
+            <div class="item-details">
+                <p class="item-title">{{ item.product.title }}</p>
+                <p class="item-price">{{ item.product.price|intcomma }}₴</p>
+            </div>
+            <p class="item-quantity">Кількість: {{ item.qty }}</p>
+        </div>
+        {% endfor %}
+
+
+        <form id='checkout-form' method='POST' class="form" action="{% url 'payment:complete_order' %}">
+          {% csrf_token %}
+      
+          <div class='form-element'>
+              <label for="delivery_type">Доставка:</label>
+              <select id="delivery_type" name="delivery_type" required>
+                  <option value="">Виберіть тип доставки</option>
+                  <option value="Самовивіз">Самовивіз</option>
+                  <option value="Кур'єр по місту">Кур'єр по місту</option>
+                  <option value="Доставка у відділення">Доставка у відділення</option>
+              </select>
+          </div>
+      
+          <div class='form-element' id="field_email">
+              <label for="id_email">Електронна пошта:</label>
+              <input type="email" name="email" autocomplete="off" placeholder='Електронна пошта' id="id_email" value="{{ shipping_address.email }}">
+          </div>
+      
+          <div class='form-element' id="field_full_name">
+              <label for="id_full_name">ПІБ</label>
+              <input type="text" name="full_name" autocomplete="off" placeholder='ПІБ' id="id_full_name">
+          </div>
+      
+          <div class='form-element' id="field_number">
+              <label for="id_number">Номер телефону:</label>
+              <input type="text" name="number" autocomplete="off" placeholder='Номер телефону' id="id_number" value="{{ shipping_address.number }}">
+          </div>
+      
+          <div class='form-element' id="field_address">
+              <label for="id_street_address">Адреса:</label>
+              <input type="text" name="street_address" autocomplete="off" placeholder='Адреса' id="id_street_address" value="{{ shipping_address.street_address }}">
+          </div>
+      
+          <div class='form-element' id="field_city">
+              <label for="id_city">Місто:</label>
+              <input type="text" name="city" autocomplete="off" placeholder='Місто' id="id_city" value="{{ shipping_address.city }}">
+          </div>
+      
+          <div class='form-element' id="field_department">
+              <label for="id_department">Відділення:</label>
+              <input type="text" name="department" autocomplete="off" placeholder='Відділення' id="id_department" value="{{ shipping_address.department }}">
+          </div>
+      
+          <div class="total">
+              <p>Сума:</p>
+              <p>{{ cart_total|intcomma }}₴</p>
+          </div>
+      
+          <input type="submit" class="payment-button" value='Оформити замовлення'> 
+      </form>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deliveryTypeSelect = document.getElementById('delivery_type');
+            const fields = {
+                email: document.getElementById('field_email'),
+                full_name: document.getElementById('field_full_name'),
+                number: document.getElementById('field_number'),
+                address: document.getElementById('field_address'),
+                city: document.getElementById('field_city'),
+                department: document.getElementById('field_department')
+            };
+    
+            function hideAllFields() {
+                Object.values(fields).forEach(field => field.style.display = 'none');
+            }
+    
+            function showFieldsForDeliveryType(type) {
+                hideAllFields();
+                fields.email.style.display = 'block';
+                fields.full_name.style.display = 'block';
+                fields.number.style.display = 'block';
+    
+                if (type === "Кур'єр по місту") {
+                    fields.address.style.display = 'block';
+                    fields.city.style.display = 'block';
+                } else if (type === 'Доставка у відділення') {
+                    fields.address.style.display = 'block';
+                    fields.city.style.display = 'block';
+                    fields.department.style.display = 'block';
+                }
+            }
+    
+            deliveryTypeSelect.addEventListener('change', function() {
+                showFieldsForDeliveryType(this.value);
+            });
+    
+            hideAllFields();
+        });
+    </script>
+      
+{% endblock content %}

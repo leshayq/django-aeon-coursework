@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'users.apps.UsersConfig',
     'cart.apps.CartConfig',
+    'payment.apps.PaymentConfig',
 
     #libraries
     'colorfield',

@@ -1,0 +1,28 @@
+<div class="profile-content-section">
+    <div class="my-orders-item">
+        <div class="order">
+            <div class="order-number">Заказ №12345</div>
+            <div class="order-item">
+                <img src="product1.jpg" alt="Продукт 1">
+                <div class="item-details">
+                    <div>Название товара 1</div>
+                    <div class="item-quantity">Количество: 2</div>
+                </div>
+            </div>
+            <div class="order-item">
+                <img src="product2.jpg" alt="Продукт 2">
+                <div class="item-details">
+                    <div>Название товара 2</div>
+                    <div class="item-quantity">Количество: 1</div>
+                </div>
+            </div>
+            <div class="order-total">Сума замовлення: 3500 грн.</div>
+        </div>
+
+        {% for order in orders%}
+        {{ order }}
+        {% empty%}
+        <p>Пусто</p>
+        {% endfor %}
+    </div>
+</div>
