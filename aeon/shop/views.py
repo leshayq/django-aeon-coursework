@@ -70,6 +70,7 @@ class CategoryListView(ListView):
     model = ProductProxy
     template_name = 'shop/category_list.html'
     context_object_name = 'products'
+    paginate_by = 12
 
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
@@ -88,6 +89,10 @@ class CategoryListView(ListView):
         return queryset
     def get_context_data(self):
         context = super().get_context_data()
+        paginator = Paginator(self.get_queryset(), self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
         
         all_products_in_category = ProductProxy.objects.filter(category=category)
@@ -100,6 +105,7 @@ class CategoryListView(ListView):
         selected_brands = self.request.GET.getlist('brand_key')
         show_all_brands = any(brand in remaining_brand_list for brand in selected_brands)
 
+        context['page_obj'] = page_obj
         context['category_title'] = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
         context['first_brand_list'] = first_brand_list
         context['remaining_brand_list'] = remaining_brand_list

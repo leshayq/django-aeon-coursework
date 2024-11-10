@@ -118,7 +118,7 @@
         <p>Характеристики <span style="font-weight: 600">{{ product.title }}</span></p>
     </div>
     <div class="characteristics-description">
-        <p>{{ product.description }}</p>
+        <p>{{ product.description|safe }}</p>
     </div>
 </div>
 

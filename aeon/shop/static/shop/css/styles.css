@@ -309,7 +309,7 @@ body {
 }
 
 .sidebar {
-    background-color: #ff4747;
+    background-color: var(--main-red-color);
     color: #ffffff;
     width: 250px;
     padding: 20px;
@@ -387,6 +387,46 @@ body {
 .checkout-button {
     margin-top: 0px !important;
 }
+
+
+nav .list-pages {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    gap: 25px;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+nav .list-pages li {
+    margin: 0;
+}
+
+nav .list-pages li a {
+    display: inline-block;
+    padding: 8px 12px;
+    color: #ff4747;
+    font-weight: bold;
+    text-decoration: none;
+    border: 1px solid #ff4747;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav .list-pages li a:hover {
+    background-color: #ff4747;
+    color: white;
+}
+
+nav .list-pages .current-page {
+    padding: 8px 12px;
+    font-weight: bold;
+    color: white;
+    background-color: #ff4747;
+    border-radius: 4px;
+}
+
 .slider-container {
     display: block;
     overflow: hidden;
