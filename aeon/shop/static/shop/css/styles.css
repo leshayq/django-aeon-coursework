@@ -302,7 +302,7 @@ body {
 .profile-container {
     display: flex;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     max-width: 1200px;
     border-radius: 8px;
     overflow: hidden;
@@ -446,39 +446,44 @@ animation-play-state: paused;
 }
 .order {
     border-bottom: 1px solid #ddd;
-    padding: 15px 0;
+    padding: 15px;
 }
 .order:last-child {
     border-bottom: none;
 }
 .order-number {
     font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 .order-item {
     display: flex;
     align-items: center;
-    font-size: 0.9em;
-    margin-bottom: 8px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    margin-left: 30px;
+
 }
 .order-item img {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     border-radius: 4px;
     margin-right: 10px;
 }
 .item-details {
     flex-grow: 1;
+    font-weight: 600;
 }
 .item-quantity {
-    font-weight: bold;
+    font-weight: 400;
+    color: #5c5c5c;
 }
 .order-total {
+    color: var(--main-red-color);
     text-align: right;
-    font-size: 1.1em;
-    font-weight: bold;
+    font-size: 1.0rem;
+    font-weight: 400;
     margin-top: 10px;
 }
 

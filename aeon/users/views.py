@@ -94,8 +94,9 @@ def profile_view(request):
 @login_required(login_url='/users/login/')
 def orders_view(request):
     context = {}
-    context['orders'] = Order.objects.filter(user=request.user)
-    return render(request, 'users/orders.html')
+    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set').order_by('-id')
+    context['orders'] = orders
+    return render(request, 'users/orders.html', context)
 
 @login_required(login_url='/users/login/')
 def shipping_view(request):
