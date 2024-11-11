@@ -85,7 +85,7 @@ def logout_user(request):
     return HttpResponseRedirect(reverse('shop:main'))
 
 def email_verification(request):
-    return render(request, 'users/email/email_verification.html')
+    return render(request, 'users/email/email_verification.html', {'title': 'Підтвердження пошти'})
 
 @login_required(login_url='/users/login/')
 def profile_view(request):

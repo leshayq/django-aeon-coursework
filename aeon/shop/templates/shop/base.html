@@ -104,14 +104,19 @@
             </span>  
         </div>
     </div>
+    {% block nopadding %}
+    {% endblock nopadding %}
+
+    {% if not is_about_page %}
     <div class="container">
         {% block content %}
         {% endblock content %}
 
         {% block navpag %}
-    
         {% endblock navpag %}
     </div>
+    {% endif %}
+
     <div>
         <div id="modal" class="modal fade">
             <div id="dialog" class="modal-dialog" hx-target="this"></div>

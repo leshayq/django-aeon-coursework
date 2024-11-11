@@ -1,3 +1,4 @@
-<h1>You are almost there, {{ user.username }}!</h1><br>
-<h2>Please click <a href="{{ link }}">here</a> to confirm your account</h2>
-<h2>The token expires on {{ expiry|time:"TIME_FORMAT" }}</h2>
+{% load static %}
+<!-- <img src="{{ request.scheme }}://{{ request.get_host }}{% static 'shop/images/logo_aeon.png' %}"> -->
+<h1>Майже все готово, {{ user.first_name }}!</h1><br>
+<h2>Будь-ласка натисніть <a href="{{ link }}">сюди</a> для підтвердження електроної пошти.</h2>

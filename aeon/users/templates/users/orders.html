@@ -17,6 +17,10 @@
             <div class="order-status-info">{{ order.delivery_type }}</div>
             <div class="order-total">Сума замовлення: {{ order.total|intcomma }}₴</div>
         </div>
+        {% empty %}
+        <div class="empty-orders">
+            <p class="faded-text">Історія замовлень порожня.</p>
+        </div>
         {% endfor %}
     </div>
 </div>

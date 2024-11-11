@@ -199,4 +199,7 @@ def contact_us_view(request):
             messages.success(request, 'Ваш запит успішно відправлено!')
             return redirect('shop:contact_us')
 
-    return render(request, 'shop/contact_us.html', {'form': form})
+    return render(request, 'shop/contact_us.html', {'form': form, 'title': 'Напишіть нам'})
+
+def about_us_view(request):
+    return render(request, 'shop/about_us.html', {'title': 'Про нас', 'is_about_page': True})

@@ -229,11 +229,11 @@ transition: background-color 0.3s ease;
 background-color: #e43f3f;
 }
 .invalid-feedback {
-    margin-top: 10px;
     color: var(--main-red-color);
     font-weight: 600;
     font-size: 0.9rem;
     margin: auto;
+    margin-top: 10px;
 }
 
 .alert-danger {
@@ -333,6 +333,7 @@ background-color: #e43f3f;
     text-decoration: none;
     transition: background-color 0.3s;
     margin-top: 20px;
+    cursor: pointer;
 }
 
 .email-button:hover {
@@ -635,6 +636,42 @@ animation-play-state: paused;
     margin-bottom: 10px !important;
     color: #28a745 !important;
 }
+
+.about-us {
+    background-color: white;
+    color: black;
+    font-weight: 600;
+    text-align: center;
+}
+
+.about-us img {
+    margin: auto;
+}
+
+.about-red {
+    background-color: var(--main-red-color);
+    color: white;
+}
+
+.about-red h1, .about-us p, .about-us h1 {
+    padding: 20px;
+}
+
+.about-us p {
+    text-align: start;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+
+.about-us h1 {
+    color: var(--main-red-color);
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.about-red h1 {
+    color: white;
+}
 .top-sales {
     padding: 20px;
 }
@@ -648,6 +685,17 @@ animation-play-state: paused;
     color: var(--main-red-color);
 }
 
+.empty-orders {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.no-bootstrap {
+    max-width: 700px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 .most-saled {
     background-color: #f4f4f4;
     border-radius: 12px;

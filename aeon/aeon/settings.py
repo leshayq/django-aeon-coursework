@@ -89,9 +89,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'uk'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
@@ -118,10 +118,11 @@ EMAIL_PAGE_DOMAIN = 'http://127.0.0.1:8000/'  # mandatory (unless you use a cust
 EMAIL_MULTI_USER = False  # optional (defaults to False)
 
 # Email Verification Settings (mandatory for email sending)
-EMAIL_MAIL_SUBJECT = 'Пiдтвердiть свiй email {{ user.username }}'
+EMAIL_MAIL_SUBJECT = 'AEON| Підтвердження пошти'
 EMAIL_MAIL_HTML = 'users/email/mail_body.html'
 EMAIL_MAIL_PLAIN = 'users/email/mail_body.txt'
 EMAIL_MAIL_TOKEN_LIFE = 60 * 60
+# 60000 * 60000
 
 # Email Verification Settings (mandatory for builtin view)
 EMAIL_MAIL_PAGE_TEMPLATE = 'users/email/email_success_template.html'
@@ -139,7 +140,7 @@ EMAIL_MAIL_CALLBACK = email_verified_callback
 # EMAIL_PASSWORD_CALLBACK = password_change_callback
 
 # For Django Email Backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL_FROM_ADDRESS')

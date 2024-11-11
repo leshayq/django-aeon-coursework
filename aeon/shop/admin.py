@@ -32,6 +32,6 @@ class ImageSliderAdmin(admin.ModelAdmin):
 
 @admin.register(ContactRequest)
 class ContactRequestAdmin(admin.ModelAdmin):
-    list_display = ('name', 'contact_info', 'subject', 'message', 'created_at', )
+    list_display = ('name', 'contact_info', 'subject', 'message', 'created_at',)
     ordering = ('created_at',)
     list_filter = ('subject',)
