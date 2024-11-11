@@ -177,6 +177,57 @@ body {
     width: auto;
     height: auto;
 } */
+
+.contact-form {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+  }
+
+.contact-form h2 {
+text-align: center;
+color: #ff4747;
+margin-bottom: 20px;
+}
+
+/* Поля ввода */
+.contact-form label {
+display: block;
+margin-bottom: 5px;
+color: #333;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+width: 100%;
+padding: 10px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 14px;
+}
+
+/* Стили для кнопки отправки */
+.contact-form button {
+width: 100%;
+padding: 12px;
+border: none;
+background-color: #ff4747;
+color: white;
+font-size: 16px;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+background-color: #e43f3f;
+}
 .invalid-feedback {
     margin-top: 10px;
     color: var(--main-red-color);
@@ -527,6 +578,14 @@ animation-play-state: paused;
     margin-top: 10px;
 }
 
+.order-status-info {
+    color: #5c5c5c;
+    text-align: right;
+    font-size: 1.0rem;
+    font-weight: 400;
+    margin-top: 10px;
+}
+
 .message-box {
     text-align: center;
     background-color: #fff;
@@ -540,6 +599,10 @@ animation-play-state: paused;
     color: #28a745;
     font-size: 1.8em;
     margin-bottom: 10px;
+}
+
+.payment-fail h1 {
+    color: var(--main-red-color);
 }
 .message-box p {
     color: #333;
@@ -556,10 +619,22 @@ animation-play-state: paused;
     font-weight: bold;
     transition: background-color 0.3s;
 }
+
+.payment-fail a {
+    background-color: var(--main-red-color);
+}
 .message-box a:hover {
     background-color: #218838;
 }
 
+.payment-fail a:hover {
+    background-color: var(--hover-red-color);
+}
+
+.valid-feedback {
+    margin-bottom: 10px !important;
+    color: #28a745 !important;
+}
 .top-sales {
     padding: 20px;
 }

@@ -13,6 +13,8 @@
                 </div>
             </div>
             {% endfor %}
+            <div class="order-status-info">{{ order.status }}</div>
+            <div class="order-status-info">{{ order.delivery_type }}</div>
             <div class="order-total">Сума замовлення: {{ order.total|intcomma }}₴</div>
         </div>
         {% endfor %}

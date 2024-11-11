@@ -89,7 +89,9 @@ def email_verification(request):
 
 @login_required(login_url='/users/login/')
 def profile_view(request):
-    return render(request, 'users/profile.html')
+    context = {}
+    context['title'] = 'Профіль користувача'
+    return render(request, 'users/profile.html', context)
 
 @login_required(login_url='/users/login/')
 def orders_view(request):

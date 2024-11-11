@@ -15,6 +15,10 @@ class ShippingAddress(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'Адреса доставки'
+        verbose_name_plural = 'Адреси доставки'
+
     def __str__(self) -> str:
         return "Shipping adress object"  + str(self.id)
     
@@ -35,6 +39,10 @@ class Order(models.Model):
     status = models.CharField('Статус', max_length=100, choices=STATUS_CHOICES, default='В обробці')
     delivery_type=models.CharField('Доставка', max_length=100, default='Доставка у відділення')
 
+    class Meta:
+        verbose_name = 'Замовлення'
+        verbose_name_plural = 'Замовлення'
+        
     def __str__(self) -> str:
         return 'Order' + str(self.id)
     

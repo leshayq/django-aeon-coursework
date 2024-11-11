@@ -1,0 +1,8 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="message-box payment-fail">
+    <h1>Оплата не пройшла.</h1>
+    <p>Під час оплати товару виникла непередбачена помилка. Будь-ласка, спробуйте ще раз.</p>
+    <a href="{% url 'cart:cart_view' %}">Корзина</a>
+</div>
+{% endblock content %}

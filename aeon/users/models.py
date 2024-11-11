@@ -33,3 +33,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'auth_user'
+        verbose_name = 'Користувач'
+        verbose_name_plural = 'Користувачі'

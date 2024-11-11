@@ -9,10 +9,12 @@ def checkout(request):
     cart = Cart(request)
     cart_items = list(cart) 
     cart_total = cart.get_total_price() 
-
+    title = 'Оформлення замовлення'
+    
     context = {
         'cart_items': cart_items,
         'cart_total': cart_total,
+        'title': title,
     }
 
     if request.user.is_authenticated:

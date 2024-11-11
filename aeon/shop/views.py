@@ -18,6 +18,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import render_to_string
 from users.forms import UserLoginForm
 from django.db.models import Q
+from .forms import ContactUsForm
+from django.urls import reverse
+from django.contrib import messages
 
 class IndexView(TemplateView):
     template_name = "shop/index.html"
@@ -63,7 +66,11 @@ class ProductDetailView(DetailView):
         if self.request.user.is_authenticated:
             product_rating = Rating.objects.filter(product=self.object, user=self.request.user).first()
         self.object.user_rating = product_rating.rating if product_rating else 0
-        similars = ProductProxy.objects.exclude(Q(title__contains=self.object)).order_by('-created_at', '-updated_at')[:3]
+
+        category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
+        similars = ProductProxy.objects.filter(category=category)
+        similars = similars.exclude(Q(title__contains=self.object)).order_by('-created_at', '-updated_at')[:3]
+        
         context['title'] = self.object.title
         context['rating'] = self.object.user_rating
         context['similars'] = similars
@@ -109,6 +116,7 @@ class CategoryListView(ListView):
         selected_brands = self.request.GET.getlist('brand_key')
         show_all_brands = any(brand in remaining_brand_list for brand in selected_brands)
 
+        context['title'] = category.name
         context['page_obj'] = page_obj
         context['category_title'] = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
         context['first_brand_list'] = first_brand_list
@@ -179,3 +187,16 @@ def search_items(request):
     items = ProductProxy.objects.filter(title__icontains=q)[:7]
 
     return render(request, 'shop/search_results.html', {'items': items})
+
+def contact_us_view(request):
+    form = ContactUsForm()
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect(f'{reverse("/users/login/")}?next={request.path}')
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Ваш запит успішно відправлено!')
+            return redirect('shop:contact_us')
+
+    return render(request, 'shop/contact_us.html', {'form': form})

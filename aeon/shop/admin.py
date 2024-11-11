@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product, Rating, ImageSlider
+from .models import Category, Product, Rating, ImageSlider, ContactRequest
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -29,3 +29,9 @@ class ImageSliderAdmin(admin.ModelAdmin):
     list_display = ('product', 'created_at')
     ordering = ('created_at',)
     list_filter = ('created_at',)
+
+@admin.register(ContactRequest)
+class ContactRequestAdmin(admin.ModelAdmin):
+    list_display = ('name', 'contact_info', 'subject', 'message', 'created_at', )
+    ordering = ('created_at',)
+    list_filter = ('subject',)

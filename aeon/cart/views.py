@@ -6,6 +6,7 @@ from django.http import JsonResponse
 def cart_view(request):
     cart = Cart(request)
     context = {'cart': cart}
+    context['title'] = 'Корзина'
     return render(request, 'cart/cart.html', context)
 
 def cart_add(request):
