@@ -42,10 +42,22 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse("shop:category_list", args=[str(self.slug)])
     
+class Brand(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False)
+
+    class Meta:
+        verbose_name = 'Бренд'
+        verbose_name_plural = 'Бренди'
+
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
+    BRAND_CHOICES = [(i, i) for i in Brand.objects.values_list('name', flat=True)]
+
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     title = models.CharField('Назва', max_length=250)
-    brand = models.CharField('Бренд', max_length=250)
+    brand = models.CharField('Бренд', max_length=250, default='Невiдомий', choices=BRAND_CHOICES)
     color = ColorField(default='#FF0000', null=False, blank=True)
     description = models.TextField('Опис', blank=True)
     slug = models.SlugField('URL', max_length=250)
@@ -63,13 +75,17 @@ class Product(models.Model):
     def average_rating(self) -> float:
         return Rating.objects.filter(product=self).aggregate(Avg("rating"))["rating__avg"] or 0
 
+
+    def save(self, *args, **kwargs):
+        self.__class__.BRAND_CHOICES = [(i, i) for i in Brand.objects.values_list('name', flat=True)]
+        super(Product, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.title
     
     def get_absolute_url(self):
         return reverse("shop:product_detail", kwargs={'slug': self.slug, 'category__slug': self.category.slug})
     
-        
 class ProductManager(models.Manager):
     def get_queryset(self) -> models.QuerySet:
         return super(ProductManager, self).get_queryset().filter(available=True)     

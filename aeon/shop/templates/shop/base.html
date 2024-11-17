@@ -178,6 +178,20 @@
         });
     </script>
     <script>
+        function toggleDetails(id, button) {
+            const details = document.getElementById(id);
+            const icon = button.querySelector('.icon');
+            
+            if (details.style.display === "none") {
+                details.style.display = "block";
+                icon.textContent = '×';
+            } else {
+                details.style.display = "none";
+                icon.textContent = '+'; 
+            }
+        }
+        </script>
+    <!-- <script>
         $(document).on('submit', '#checkout-form', function(e) {
             e.preventDefault();
             $.ajax({
@@ -203,7 +217,7 @@
                 }
             });
         });
-  </script>
+  </script> -->
     
 </body>
 </html>

@@ -1,3 +1,4 @@
+{% load humanize %}
 {% for item in items %}
 <a href="{{ item.get_absolute_url }}">
 <div class="product-item">
@@ -7,7 +8,7 @@
             <p class="product-item-title">{{ item.title }}</p>
         </div>
         <div>
-            <p class="product-item-price">{{ item.price }}₴</p>
+            <p class="product-item-price">{{ item.price|intcomma }}₴</p>
         </div>
     </div>
 </div>

@@ -24,7 +24,7 @@
         {% endfor %}
 
 
-        <form id='checkout-form' method='POST' class="form" action="{% url 'payment:complete_order' %}">
+        <form id='checkout-form' method='POST' class="form"> <!-- action="{% url 'payment:complete_order' %}"  -->
           {% csrf_token %}
       
           <div class='form-element'>

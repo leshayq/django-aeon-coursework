@@ -3,26 +3,45 @@ from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
 from .forms import ShippingAddressForm
 from .models import Order, OrderItem, ShippingAddress
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.views.generic import TemplateView
+from liqpay import LiqPay
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from datetime import datetime
+
 @login_required(login_url='/users/login/')
 def checkout(request):
     cart = Cart(request)
-    cart_items = list(cart) 
-    cart_total = cart.get_total_price() 
+    cart_items = list(cart)
+    cart_total = cart.get_total_price()
+
     title = 'Оформлення замовлення'
-    
     context = {
         'cart_items': cart_items,
         'cart_total': cart_total,
         'title': title,
     }
 
-    if request.user.is_authenticated:
-        shipping_address, created = ShippingAddress.objects.get_or_create(user=request.user)
-        if shipping_address:
-            context['shipping_address'] = shipping_address
-            return render(request, 'payment/checkout.html', context)
-
+    if request.method == 'POST':
+        liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+        params = {
+            'action': 'pay',
+            'amount': str(cart_total),
+            'currency': 'UAH',
+            'description': 'Оплата замовлення',
+            'order_id': f'order_{request.user.id}_{cart_total}_{int(datetime.now().timestamp())}',
+            'version': '3',
+            'sandbox': 0,  
+            'server_url': request.build_absolute_uri('/payment/callback/'),
+            'result_url': request.build_absolute_uri('/payment/payment_success/'),
+        }
+        signature = liqpay.cnb_signature(params)
+        data = liqpay.cnb_data(params)
+        context.update({'signature': signature, 'data': data})
+        return render(request, 'payment/pay.html', context)
 
     return render(request, 'payment/checkout.html', context)
 
@@ -87,8 +106,6 @@ def complete_order(request):
         else:
             return redirect('users:login')
 
-        
-        return JsonResponse({'success': True})
     
 @login_required(login_url='/users/login/')
 def payment_success(request):
@@ -99,3 +116,44 @@ def payment_success(request):
 @login_required(login_url='/users/login/')
 def payment_fail(request):
     return render(request, 'payment/payment_fail.html')
+
+
+class PayView(TemplateView):
+    template_name = 'payment/pay.html'
+
+    def get(self, request, *args, **kwargs):
+        liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+        params = {
+            'action': 'pay',
+            'amount': '100',
+            'currency': 'USD',
+            'description': 'Payment for clothes',
+            'order_id': 'order_id_1',
+            'version': '3',
+            'sandbox': 1,
+            'server_url': request.build_absolute_uri('/payment/callback/'),
+            'result_url': request.build_absolute_uri('/payment/payment_success/'), 
+        }
+        signature = liqpay.cnb_signature(params)
+        data = liqpay.cnb_data(params)
+        return render(request, self.template_name, {'signature': signature, 'data': data})
+
+@method_decorator(csrf_exempt, name='dispatch')
+class PayCallbackView(View):
+    def post(self, request, *args, **kwargs):
+        liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+        data = request.POST.get('data')
+        signature = request.POST.get('signature')
+        sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
+        
+        if sign == signature:
+            print('callback is valid')
+            response = liqpay.decode_data_from_str(data)
+            print('callback data', response)
+            
+            if response.get('status') == 'success':
+                return redirect('payment:payment_success')
+            else:
+                return redirect('payment:payment_fail')
+
+        return HttpResponse(status=400)

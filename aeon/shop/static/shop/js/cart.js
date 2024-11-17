@@ -53,7 +53,7 @@ function changeQuantity(amount, productId) {
         const newQty = currentQty + amount;
         if (newQty >= input.min && newQty <= input.max) {
             input.value = newQty;
-            updateCart(productId); 
+            updateCart(productId);
         }
     }
 }
@@ -65,17 +65,27 @@ function updateCart(productId) {
     if (!isNaN(productQty)) {
         $.ajax({
             type: 'POST',
-            url: updateCartUrl,  
+            url: updateCartUrl,
             data: {
                 product_id: productId,
                 product_qty: productQty,
-                csrfmiddlewaretoken: csrfToken,  
+                csrfmiddlewaretoken: csrfToken,
                 action: 'post',
             },
             success: function(response) {
-                console.log('Cart updated:', response);
+                // Обновляем общую сумму
+                const totalPriceElement = document.getElementById('total');
                 const formattedTotal = formatNumberWithCommas(response.total);
-                document.getElementById('total').innerHTML = '<h1>Загальна сума: ' + formattedTotal + '₴</h1>';
+                totalPriceElement.innerHTML = '<h1>Загальна сума: ' + formattedTotal + '₴</h1>';
+
+                // Обновляем цену конкретного товара в блоке "price"
+                const priceElement = document.getElementById(`price-${productId}`);
+                const formattedPrice = formatNumberWithCommas(response.item_total);
+                priceElement.textContent = `₴${formattedPrice}`;
+
+                // Обновляем количество и базовую цену в блоке "item-total"
+                const itemTotalElement = document.getElementById(`item-total-${productId}`);
+                itemTotalElement.textContent = `${response.item_qty} x ₴${formatNumberWithCommas(response.item_price)}`;
             },
             error: function(error) {
                 console.log('Error:', error);

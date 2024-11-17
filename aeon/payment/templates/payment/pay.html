@@ -1,0 +1,18 @@
+<div id="liqpay_checkout"></div>
+<script>
+    window.LiqPayCheckoutCallback = function() {
+        LiqPayCheckout.init({
+            data: "{{ data }}",
+            signature: "{{ signature }}",
+            embedTo: "#liqpay_checkout",
+            mode: "embed" // "embed" для встроенного режима, "popup" для всплывающего окна
+        }).on("liqpay.callback", function(data){
+            console.log("Callback data:", data);
+        }).on("liqpay.ready", function(data){
+            console.log("LiqPay готов");
+        }).on("liqpay.close", function(data){
+            console.log("LiqPay закрыт");
+        });
+    };
+</script>
+<script src="//static.liqpay.ua/libjs/checkout.js" async></script>

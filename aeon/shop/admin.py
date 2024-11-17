@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from .models import Category, Product, Rating, ImageSlider, ContactRequest
+from .models import Category, Product, Rating, ImageSlider, ContactRequest, Brand
+from django.utils.safestring import mark_safe
+
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('name',)
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
@@ -12,8 +19,20 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'brand', 'slug', 'price', 'available', 'created_at', 'updated_at')
+    fields = ('title', 'brand', 'color', 'slug', 'price', 'image', 'image_preview', 'available',)
+    readonly_fields = ('image_preview',)
     ordering = ('-created_at', '-updated_at')
     list_filter = ('available', 'created_at', 'updated_at')
+
+    class Media:
+        js = ('shop/js/product_image_preview.js',)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" width="200" style="margin-top: 10px;" />')
+        return "No image available"
+
+    image_preview.short_description = "Поточне зображення"
 
     def get_prepopulated_fields(self, request, obj=None):
         return {'slug': ('title',)}

@@ -404,8 +404,8 @@ background-color: #e43f3f;
 
 .profile-content {
     flex-grow: 1;
-    padding: 40px;
     background-color: #ffffff;
+    padding: 0px 20px 20px 40px;
 }
 
 .profile-content-header h1 {
@@ -420,14 +420,11 @@ background-color: #e43f3f;
     margin-bottom: 20px;
 }
 
-.profile-content-section {
-    margin-top: 30px;
-}
 
 .profile-content-section h2 {
     font-size: 24px;
     color: #333;
-    margin-bottom: 15px;
+    padding: 20px 20px 20px 0;
 }
 
 .profile-content-section p {
@@ -532,60 +529,102 @@ animation-play-state: paused;
 
 .my-orders-item {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
 }
+
 .order {
     border-bottom: 1px solid #ddd;
-    padding: 15px;
+    padding: 15px 0;
 }
+
 .order:last-child {
     border-bottom: none;
 }
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .order-number {
     font-size: 1.2em;
-    font-weight: 600;
-    margin-bottom: 15px;
+    font-weight: bold;
 }
+
+.order-summary {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-total {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--main-red-color);
+}
+
+.order-status {
+    font-size: 0.9rem;
+    color: #5c5c5c;
+}
+
+.toggle-details {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--main-red-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-details .icon {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.order-details {
+    margin-top: 25px;
+    padding-left: 30px;
+    border-left: 2px solid var(--main-red-color);
+    display: none;
+}
+
 .order-item {
     display: flex;
     align-items: center;
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-    margin-left: 30px;
-
+    margin-bottom: 30px;
 }
+
 .order-item img {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 4px;
-    margin-right: 10px;
+    margin-right: 15px;
 }
+
 .item-details {
-    flex-grow: 1;
-    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
 }
+
 .item-quantity {
-    font-weight: 400;
-    color: #5c5c5c;
+    font-size: 0.9rem;
+    color: #777;
 }
-.order-total {
-    color: var(--main-red-color);
-    text-align: right;
-    font-size: 1.0rem;
-    font-weight: 400;
+
+.order-delivery-info {
+    font-size: 0.9rem;
+    color: #555;
     margin-top: 10px;
 }
 
-.order-status-info {
-    color: #5c5c5c;
-    text-align: right;
-    font-size: 1.0rem;
-    font-weight: 400;
-    margin-top: 10px;
-}
 
 .message-box {
     text-align: center;

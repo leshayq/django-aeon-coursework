@@ -3,19 +3,30 @@
     <div class="my-orders-item">
         {% for order in orders %}
         <div class="order">
-            <div class="order-number">Замовлення №{{ order.id}}</div>
-            {% for item in order.orderitem_set.all %}
-            <div class="order-item">
-                <img src="{{ item.product.image.url }}" alt="Продукт 1">
-                <div class="item-details">
-                    <div>{{ item.product.title }}</div>
-                    <div class="item-quantity">Кількість: {{ item.quantity }}</div>
+            <div class="order-header">
+                <div class="order-number">
+                    Замовлення №{{ order.id }} {{ order.created|date:'d-m-Y' }}
+                </div>
+                <div class="order-summary">
+                    <div>Сума: <span class="order-total">{{ order.total|intcomma }}₴</span></div>
+                    <div>Статус: <span class="order-status">{{ order.status }}</span></div>
+                    <button class="toggle-details" onclick="toggleDetails('details-{{ order.id }}', this)">
+                        <span class="icon">+</span>
+                    </button>
                 </div>
             </div>
-            {% endfor %}
-            <div class="order-status-info">{{ order.status }}</div>
-            <div class="order-status-info">{{ order.delivery_type }}</div>
-            <div class="order-total">Сума замовлення: {{ order.total|intcomma }}₴</div>
+            <div id="details-{{ order.id }}" class="order-details" style="display: none;">
+                {% for item in order.orderitem_set.all %}
+                <div class="order-item">
+                    <img src="{{ item.product.image.url }}" alt="Продукт 1">
+                    <div class="item-details">
+                        <div>{{ item.product.title }}</div>
+                        <div class="item-quantity">Кількість: {{ item.quantity }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="order-delivery-info">Тип доставки: {{ order.delivery_type }}</div>
+            </div>
         </div>
         {% empty %}
         <div class="empty-orders">

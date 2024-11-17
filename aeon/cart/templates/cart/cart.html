@@ -1,6 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load humanize %}
-{% block title %} {{ title }} {% endblock title%}
+{% block title %} {{ title }} {% endblock title %}
 {% block content %}
 <div class="top-sales category-sales">
     <h1>Корзина</h1>
@@ -19,28 +19,29 @@
         </div>
     </div>
     <div class="wishlist-actions">
-        <span class="price">₴{{ product.price|intcomma }}</span><br>
+        <span class="price" id="price-{{ item.product.id }}">₴{{ item.total|intcomma }}</span><br>
+        <span class="item-total" id="item-total-{{ item.product.id }}" style="font-size: 0.9em; color: grey;">
+            {{ item.qty }} x ₴{{ product.price|intcomma }}
+        </span>
     </div>
-        <button 
-            class="remove-icon"
-            id="cart-delete-button"
-            type="button"
-            data-index="{{ product.id }}"
-            >&times;
-        </button>
+    <button 
+        class="remove-icon"
+        id="cart-delete-button"
+        type="button"
+        data-index="{{ product.id }}"
+    >&times;</button>
 </div>
 {% endwith %}
-{% empty %}
-<p class="faded-text">Корзина порожня.</p>
 {% endfor %}
+
+
 
 {% if cart.get_total_price != 0 %}
 <div class="top-sales category-sales" id="total">
-    <h1>Загальна сума: {{ cart.get_total_price|intcomma }}₴</h2>
+    <h1>Загальна сума: {{ cart.get_total_price|intcomma }}₴</h1>
 </div>
 
 <a href='{% url "payment:checkout" %}' class="email-button checkout-button">До сплати</a>
 {% endif %}
-
 
 {% endblock content %}

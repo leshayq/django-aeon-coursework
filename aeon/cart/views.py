@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .cart import Cart
 from shop.models import ProductProxy
 from django.http import JsonResponse
+from decimal import Decimal
 
 def cart_view(request):
     cart = Cart(request)
@@ -57,6 +58,16 @@ def cart_update(request):
 
         cart_total = cart.get_total_price()
 
-        response = JsonResponse({'total': cart_total})
+        # Получаем данные о товаре
+        item = cart.cart[str(product_id)]
+        item_price = Decimal(item['price'])
+        item_total = item_price * item['qty']
+
+        response = JsonResponse({
+            'total': cart_total,
+            'item_price': item_price,
+            'item_qty': item['qty'],
+            'item_total': item_total
+        })
 
         return response
