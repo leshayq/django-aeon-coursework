@@ -6,7 +6,7 @@ from .forms import ShippingAddressForm
 from .models import Order, OrderItem, ShippingAddress
 from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
-from liqpay import LiqPay
+# from liqpay import LiqPay
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -55,23 +55,23 @@ def checkout(request):
         'title': title,
     }
 
-    if request.method == 'POST':
-        liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-        params = {
-            'action': 'pay',
-            'amount': str(cart_total),
-            'currency': 'UAH',
-            'description': 'Оплата замовлення',
-            'order_id': f'order_{request.user.id}_{cart_total}_{int(datetime.now().timestamp())}',
-            'version': '3',
-            'sandbox': 0,  
-            'server_url': request.build_absolute_uri('/payment/callback/'),
-            'result_url': request.build_absolute_uri('/payment/payment_success/'),
-        }
-        signature = liqpay.cnb_signature(params)
-        data = liqpay.cnb_data(params)
-        context.update({'signature': signature, 'data': data})
-        return render(request, 'payment/pay.html', context)
+    # if request.method == 'POST':
+    #     liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+    #     params = {
+    #         'action': 'pay',
+    #         'amount': str(cart_total),
+    #         'currency': 'UAH',
+    #         'description': 'Оплата замовлення',
+    #         'order_id': f'order_{request.user.id}_{cart_total}_{int(datetime.now().timestamp())}',
+    #         'version': '3',
+    #         'sandbox': 0,  
+    #         'server_url': request.build_absolute_uri('/payment/callback/'),
+    #         'result_url': request.build_absolute_uri('/payment/payment_success/'),
+    #     }
+    #     signature = liqpay.cnb_signature(params)
+    #     data = liqpay.cnb_data(params)
+    #     context.update({'signature': signature, 'data': data})
+    #     return render(request, 'payment/pay.html', context)
 
     return render(request, 'payment/checkout.html', context)
 

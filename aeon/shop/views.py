@@ -181,12 +181,14 @@ def remove_from_wishlist(request, product_id):
 
     return redirect('shop:wishlist')
 
+#########################
+
 def search_items(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
     
     items = ProductProxy.objects.filter(title__icontains=q)[:7]
 
-    return render(request, 'shop/search_results.html', {'items': items})
+    return render(request, 'shop/partials/_search_results.html', {'items': items})
 
 def contact_us_view(request):
     form = ContactUsForm()
@@ -199,7 +201,7 @@ def contact_us_view(request):
             messages.success(request, 'Ваш запит успішно відправлено!')
             return redirect('shop:contact_us')
 
-    return render(request, 'shop/contact_us.html', {'form': form, 'title': 'Напишіть нам'})
+    return render(request, 'shop/footer/contact_us.html', {'form': form, 'title': 'Напишіть нам'})
 
 def about_us_view(request):
-    return render(request, 'shop/about_us.html', {'title': 'Про нас', 'is_about_page': True})
+    return render(request, 'shop/footer/about_us.html', {'title': 'Про нас', 'is_about_page': True})

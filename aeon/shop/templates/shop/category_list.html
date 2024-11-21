@@ -54,8 +54,7 @@
                     </div>
 
                     {% if not show_all_brands %}
-                    <button class='load-more-button' type='button' id="show-more-brands" onclick="showMoreBrands()">Показати ще</button>
-                    {% endif %}
+                    <button class="load-more-button" type="button" id="show-more-brands">Показати ще</button>                    {% endif %}
                 </div>
             </div>
             <input type="submit" class='auth-button' value="ОК"/>
@@ -76,7 +75,7 @@
 
         <div class="most-saled">
             <div class="product-grid category-grid" id="products">
-                {% include 'shop/_products.html' %}
+                {% include 'shop/partials/_products.html' %}
             </div>
         </div>
     </div>

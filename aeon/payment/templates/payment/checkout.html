@@ -15,7 +15,7 @@
 
         {% for item in cart_items %}
         <div class="cart-item">
-            <img src="{{ item.product.image.url }}" alt="Product Image">
+            <img src="{{ item.product.get_first_image.picture.url }}" alt="Product Image">
             <div class="item-details">
                 <p class="item-title">{{ item.product.title }}</p>
                 <p class="item-price">{{ item.product.price|intcomma }}₴</p>
@@ -131,38 +131,36 @@ document.addEventListener('DOMContentLoaded', function () {
     departmentResults.classList.add('results-list');
     departmentInput.parentNode.appendChild(departmentResults);
 
-    let cityName = ''; // Для хранения выбранного города
+    let cityName = ''; 
 
-    // Функция для поиска городов
     function fetchCities(query) {
-        // Проверяем, если запрос пустой, не показываем список
         if (!query) {
-            cityResults.innerHTML = ''; // Очищаем результаты
-            cityResults.classList.remove('show'); // Скрываем список
+            cityResults.innerHTML = ''; 
+            cityResults.classList.remove('show'); 
             return;
         }
 
         fetch(`/payment/api/search/cities/?query=${query}`)
             .then(response => response.json())
             .then(data => {
-                cityResults.innerHTML = ''; // Очищаем предыдущие результаты
+                cityResults.innerHTML = '';
                 if (data.success && Array.isArray(data.data.data)) {
                     if (data.data.data.length > 0) {
-                        cityResults.classList.add('show'); // Показываем список, если есть результаты
+                        cityResults.classList.add('show'); 
                         data.data.data.forEach(item => {
                             const settlementTypeDescription = item.SettlementTypeDescription || ''; // Получаем тип населенного пункта, если он есть
                             const li = document.createElement('li');
                             li.textContent = `${settlementTypeDescription} ${item.Description}, ${item.AreaDescription} область`;
                             li.addEventListener('click', () => {
                                 cityInput.value = `${settlementTypeDescription} ${item.Description}, ${item.AreaDescription}`;
-                                cityResults.innerHTML = ''; // Очистить список
-                                cityResults.classList.remove('show'); // Скрыть список после выбора
-                                cityName = item.Description; // Сохраняем название города
+                                cityResults.innerHTML = ''; 
+                                cityResults.classList.remove('show'); 
+                                cityName = item.Description; 
                             });
                             cityResults.appendChild(li);
                         });
                     } else {
-                        cityResults.classList.remove('show'); // Скрыть список, если нет результатов
+                        cityResults.classList.remove('show');
                     }
                 } else {
                     console.error('Ошибка в данных города:', data);
@@ -173,58 +171,50 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Обработчик для ввода в поле города
     cityInput.addEventListener('input', function () {
         const query = cityInput.value;
         fetchCities(query);
     });
 
-    // Функция для поиска отделений
-    // Функция для поиска отделений
 function fetchWarehouses(query, cityName) {
-    // Если город не выбран, не выполняем запрос
     if (!cityName) return;
 
-    // Если запрос пустой, не показываем список
     if (!query) {
-        departmentResults.innerHTML = ''; // Очищаем результаты
-        departmentResults.classList.remove('show'); // Скрываем список
+        departmentResults.innerHTML = ''; 
+        departmentResults.classList.remove('show'); 
         return;
     }
 
     fetch(`/payment/api/search/warehouses/?query=${query}&city_name=${encodeURIComponent(cityName)}`)
         .then(response => response.json())
         .then(data => {
-            departmentResults.innerHTML = ''; // Очищаем предыдущие результаты
+            departmentResults.innerHTML = ''; 
             if (data.success && Array.isArray(data.data.data)) {
                 if (data.data.data.length > 0) {
-                    departmentResults.classList.add('show'); // Показываем список, если есть результаты
+                    departmentResults.classList.add('show'); 
                     data.data.data.forEach(item => {
                         const li = document.createElement('li');
 
-                        // Создаем элемент <img> для изображения
                         const img = document.createElement('img');
-                        img.src = '{% static "shop/images/novaposhta.png" %}'; // Путь к изображению
+                        img.src = '{% static "shop/images/novaposhta.png" %}'; 
                         img.width = 24;
                         img.height = 24;
-                        img.alt = 'Nova Poshta'; // Описание изображения, если необходимо
+                        img.alt = 'Nova Poshta';
 
-                        // Добавляем изображение в элемент <li>
                         li.appendChild(img);
 
-                        // Создаем текстовый узел и добавляем его в <li>
                         const textNode = document.createTextNode(` ${item.Description}`);
                         li.appendChild(textNode);
 
                         li.addEventListener('click', () => {
-                            departmentInput.value = item.Description; // Устанавливаем значение поля
-                            departmentResults.innerHTML = ''; // Очистить список
-                            departmentResults.classList.remove('show'); // Скрыть список после выбора
+                            departmentInput.value = item.Description; 
+                            departmentResults.innerHTML = ''; 
+                            departmentResults.classList.remove('show'); 
                         });
                         departmentResults.appendChild(li);
                     });
                 } else {
-                    departmentResults.classList.remove('show'); // Скрыть список, если нет результатов
+                    departmentResults.classList.remove('show');
                 }
             } else {
                 console.error('Ошибка в данных отделений:', data);
@@ -236,7 +226,6 @@ function fetchWarehouses(query, cityName) {
 }
 
 
-    // Обработчик для ввода в поле отделения
     departmentInput.addEventListener('input', function () {
         const query = departmentInput.value;
         fetchWarehouses(query, cityName);

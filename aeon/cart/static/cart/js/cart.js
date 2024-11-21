@@ -45,6 +45,12 @@ function formatNumberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+$(document).on('click', '.qty-btn', function(e) {
+    const productId = $(this).data('product-id');
+    const amount = $(this).hasClass('qty-btn-increase') ? 1 : -1;
+    changeQuantity(amount, productId);
+});
+
 function changeQuantity(amount, productId) {
     const input = document.getElementById(`qtyInput${productId}`);
     let currentQty = parseInt(input.value);
@@ -73,17 +79,14 @@ function updateCart(productId) {
                 action: 'post',
             },
             success: function(response) {
-                // Обновляем общую сумму
                 const totalPriceElement = document.getElementById('total');
                 const formattedTotal = formatNumberWithCommas(response.total);
                 totalPriceElement.innerHTML = '<h1>Загальна сума: ' + formattedTotal + '₴</h1>';
 
-                // Обновляем цену конкретного товара в блоке "price"
                 const priceElement = document.getElementById(`price-${productId}`);
                 const formattedPrice = formatNumberWithCommas(response.item_total);
                 priceElement.textContent = `₴${formattedPrice}`;
 
-                // Обновляем количество и базовую цену в блоке "item-total"
                 const itemTotalElement = document.getElementById(`item-total-${productId}`);
                 itemTotalElement.textContent = `${response.item_qty} x ₴${formatNumberWithCommas(response.item_price)}`;
             },

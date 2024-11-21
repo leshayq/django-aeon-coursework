@@ -5,11 +5,12 @@ from shop.models import ProductProxy, Category
 content = {
     'Мобільні телефони': {
         'Смартфони': {
-            'Xiaomi': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Xiaomi&sort_option=popularity',
-            'Apple': '/mobilni-telefoni/?brand_key=Apple',
-            'Samsung': '/mobilni-telefoni/?brand_key=Samsung',
-            'OPPO': '/mobilni-telefoni/?brand_key=OPPO',
-            'Honor': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Honor&sort_option=popularity',
+            'Xiaomi': '/mobilni-telefoni/?brand_key=Xiaomi&sort_option=popularity',
+            'Apple': '/mobilni-telefoni/?brand_key=Apple&sort_option=popularity',
+            'Samsung': '/mobilni-telefoni/?brand_key=Samsung&sort_option=popularity',
+            'OPPO': '/mobilni-telefoni/?brand_key=OPPO&sort_option=popularity',
+            'Honor': '/mobilni-telefoni/?brand_key=Honor&sort_option=popularity',
+            'Всі смартфони': '/mobilni-telefoni/?sort_option=popularity',
         },
         'Аксесуари': {
             'Захисне скло': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
@@ -38,6 +39,7 @@ content = {
             'LG': '/mobilni-telefoni/?brand_key=Apple',
             'Sony': '/mobilni-telefoni/?brand_key=OPPO',
             'Phillips': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Honor&sort_option=popularity',
+            'Всі телевізори': '/mobilni-telefoni/?sort_option=popularity',
         },
         'Фото і відеотехніка': {
             'Фотоапарати': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',

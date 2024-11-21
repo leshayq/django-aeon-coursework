@@ -27,7 +27,7 @@ class ProductImageInLine(admin.StackedInline):
             return mark_safe(f'<img src="{instance.picture.url}" width="100" height="100" />')
         return 'Нет изображения'
     
-    image_preview.short_description = 'Предпросмотр'
+    image_preview.short_description = 'Попередній перегляд'
     image_preview.allow_tags = True
 
 @admin.register(Product)

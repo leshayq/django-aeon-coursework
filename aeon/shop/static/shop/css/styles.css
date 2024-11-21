@@ -92,10 +92,6 @@ body {
     color: #fff;
 }
 
-.account-cart-wish {
-    /* margin-right: auto; */
-}
-
 .account-cart-wish span {
     margin: 15px;
 }
@@ -173,10 +169,6 @@ body {
     background-color: var(--hover-red-color);
 }
 
-/* .ad-banner {
-    width: auto;
-    height: auto;
-} */
 
 .contact-form {
     background-color: white;
@@ -194,7 +186,6 @@ color: #ff4747;
 margin-bottom: 20px;
 }
 
-/* Поля ввода */
 .contact-form label {
 display: block;
 margin-bottom: 5px;
@@ -212,7 +203,6 @@ border-radius: 5px;
 font-size: 14px;
 }
 
-/* Стили для кнопки отправки */
 .contact-form button {
 width: 100%;
 padding: 12px;
@@ -271,14 +261,14 @@ background-color: #e43f3f;
     transition: background-color 0.3s;
   }
 
-  /* Стиль иконки */
+
   .return-button .icon {
     margin-right: 8px;
     display: inline-flex;
     align-items: center;
   }
 
-  /* Эффект наведения */
+
   .return-button:hover {
     background-color: #e0e0e0;
   }
@@ -641,10 +631,10 @@ animation-play-state: paused;
 }
 
 .slider-image {
-    width: 100% !important; /* Занимает всю ширину контейнера */
-    height: 100% !important; /* Занимает всю высоту контейнера */
-    object-fit: cover !important; /* Картинка будет покрывать весь блок, сохраняя пропорции */
-    flex-shrink: 0 !important; /* Не сжимаем изображение */
+    width: 100% !important;
+    height: 100% !important; 
+    object-fit: cover !important;
+    flex-shrink: 0 !important; 
 }
 
 .slider-btn {
@@ -1002,7 +992,6 @@ animation-play-state: paused;
 .footer {
     color: #fff;
     background-color: #151414;
-    /* margin-bottom: -30px; */
     margin-bottom: 0;
     margin: 0;
     padding: 0;
@@ -1374,7 +1363,6 @@ animation-play-state: paused;
 
 .category-flex {
     display: flex;
-    /* justify-content: space-between; */
 }
 
 .category-filters {
@@ -1494,6 +1482,44 @@ input[type="number"]:focus {
     object-fit: cover;
 }
 
+
+.catalog-category-elem {
+    padding: 30px;
+    font-size: 18px;
+  }
+  
+  .catalog-category-elem:last-child {
+    margin-bottom: 30px;
+  }
+  
+  .catalog-category-elem > strong {
+    color: #e13c3c;
+    margin-bottom: 5px;
+  }
+  
+  .catalog-category-elem > ul {
+    list-style: none;
+    margin-top: 10px;
+  }
+  
+  .catalog-category-elem > ul > li {
+    padding: 10px;
+  }
+  
+  .catalog-category-elem > ul > li > a {
+    text-decoration-line: none;
+    color: #000;
+  }
+  
+  .catalog-category-elem > ul > li > a:hover {
+    text-decoration-line: underline;
+  }
+  
+  .catalog-category-elem > ul > li:last-child {
+    margin-bottom: -45px;
+  }
+  
+
 .wishlist-item {
     display: flex;
     align-items: center;
@@ -1507,7 +1533,6 @@ input[type="number"]:focus {
     position: relative;
 }
 
-/* Стиль для изображения товара */
 .wishlist-item img {
     width: 120px;
     height: 120px;
@@ -1515,7 +1540,6 @@ input[type="number"]:focus {
     object-fit: cover;
 }
 
-/* Контейнер для текста */
 .wishlist-info {
     flex: 1;
     margin-left: 16px;
@@ -1533,7 +1557,6 @@ input[type="number"]:focus {
     color: #666;
 }
 
-/* Цена и кнопка добавить в корзину */
 .wishlist-actions {
     text-align: right;
 }

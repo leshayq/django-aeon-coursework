@@ -10,7 +10,7 @@
                 <div class="order-summary">
                     <div>Сума: <span class="order-total">{{ order.total|intcomma }}₴</span></div>
                     <div>Статус: <span class="order-status">{{ order.status }}</span></div>
-                    <button class="toggle-details" onclick="toggleDetails('details-{{ order.id }}', this)">
+                    <button class="toggle-details" data-details-id="details-{{ order.id }}">
                         <span class="icon">+</span>
                     </button>
                 </div>

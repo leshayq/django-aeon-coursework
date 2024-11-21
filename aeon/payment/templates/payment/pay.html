@@ -5,7 +5,7 @@
             data: "{{ data }}",
             signature: "{{ signature }}",
             embedTo: "#liqpay_checkout",
-            mode: "embed" // "embed" для встроенного режима, "popup" для всплывающего окна
+            mode: "embed"
         }).on("liqpay.callback", function(data){
             console.log("Callback data:", data);
         }).on("liqpay.ready", function(data){

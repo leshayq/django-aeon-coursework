@@ -5,4 +5,11 @@
     <p>Дякуємо за ваше замовлення. Ми зв'яжемося з вами найближчим часом для підтвердження доставки.</p>
     <a href="{% url 'shop:main' %}">Головна сторінка</a>
 </div>
+
+<script>
+    setTimeout(function() {
+        window.location.href = '{% url "shop:main" %}'; 
+    }, 5000);
+</script>
+
 {% endblock content %}

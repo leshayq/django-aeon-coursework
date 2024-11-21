@@ -11,7 +11,7 @@ class ShippingAddress(models.Model):
 
     city = models.CharField(max_length=100, blank=True, null=True, verbose_name='Місто')
     street_address = models.CharField(max_length=100, blank=True, null=True, verbose_name='Адреса')
-    department = models.IntegerField(blank=True, null=True, verbose_name='Відділення')
+    department = models.CharField(max_length=100, blank=True, null=True, verbose_name='Відділення')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
