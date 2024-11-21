@@ -1,6 +1,7 @@
 import random
 import string
 from django.db import models
+from django.forms import ValidationError
 from django.utils.text import slugify
 from django.urls import reverse
 from colorfield.fields import ColorField
@@ -62,7 +63,6 @@ class Product(models.Model):
     description = models.TextField('Опис', blank=True)
     slug = models.SlugField('URL', max_length=250)
     price = models.DecimalField('Ціна', max_digits=10, decimal_places=2, default=99.99)
-    image = models.ImageField('Зображення', upload_to='products/%Y/%m/%d')
     available = models.BooleanField('Наявність', default=True)
     created_at = models.DateTimeField('Дата створення', auto_now_add=True)
     updated_at = models.DateTimeField('Дата оновлення', auto_now=True)
@@ -75,6 +75,8 @@ class Product(models.Model):
     def average_rating(self) -> float:
         return Rating.objects.filter(product=self).aggregate(Avg("rating"))["rating__avg"] or 0
 
+    def get_first_image(self):
+        return self.images.first()
 
     def save(self, *args, **kwargs):
         self.__class__.BRAND_CHOICES = [(i, i) for i in Brand.objects.values_list('name', flat=True)]
@@ -85,7 +87,23 @@ class Product(models.Model):
     
     def get_absolute_url(self):
         return reverse("shop:product_detail", kwargs={'slug': self.slug, 'category__slug': self.category.slug})
-    
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    picture = models.ImageField('Зображення', upload_to='products/%Y/%m/%d')
+
+    class Meta:
+        verbose_name = 'Зображення товару'
+        verbose_name_plural = 'Зображення товарів'
+
+    # def save(self, *args, **kwargs):
+    #     if self.product.images.count() >= 5:
+    #         raise ValidationError("Товар не может иметь больше 5 фото.")
+        
+        # super().save(*args, **kwargs)
+    def __str__(self):
+        return f"Зображення для {self.product.title}"   
+
 class ProductManager(models.Manager):
     def get_queryset(self) -> models.QuerySet:
         return super(ProductManager, self).get_queryset().filter(available=True)     

@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
@@ -11,6 +12,35 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from datetime import datetime
+from novaposhta.client import NovaPoshtaApi
+import dotenv
+import os
+
+dotenv.load_dotenv()
+
+client = NovaPoshtaApi(os.getenv('NOVA_POSHTA_API'), timeout=30)
+
+def search_cities(request):
+    query = request.GET.get('query', '')
+    if query:
+        # Получаем данные из API Новой Почты
+        cities = client.address.get_settlements(find_by_string=query, warehouse=1, limit=5)
+        return JsonResponse({'success': True, 'data': cities})
+    return JsonResponse({'success': False, 'message': 'Query parameter is missing'})
+
+def search_warehouses(request):
+    query = request.GET.get('query', '')
+    city_name = request.GET.get('city_name', '')
+    print(f"Поиск отделений: city_name={city_name}, query={query}")
+    
+    if city_name and query:
+        try:
+            warehouses = client.address.get_warehouses(city_name=city_name, warehouse_id=query)
+            return JsonResponse({'success': True, 'data': warehouses})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    
+    return JsonResponse({'success': False, 'message': 'City name or query parameter is missing'})
 
 @login_required(login_url='/users/login/')
 def checkout(request):

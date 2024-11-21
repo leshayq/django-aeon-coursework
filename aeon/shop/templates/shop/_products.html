@@ -3,7 +3,7 @@
 <div class="product-card">
     <a class='a-no-link' href='{{ product.get_absolute_url }}'>
         <div class="product-image">
-            <img src="{{ product.image.url }}" alt="Product Image">
+            <img src="{{ product.get_first_image.picture.url }}" alt="Product Image">
         </div>
         <div class="product-info">
             <h2 class="product-title">{{ product.title }}</h2>

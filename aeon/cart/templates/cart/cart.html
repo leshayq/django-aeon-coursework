@@ -8,7 +8,7 @@
 {% for item in cart %}
 {% with product=item.product %}
 <div class="wishlist-item">
-    <img src="{{ product.image.url }}" alt="Product Image">
+    <img src="{{ product.get_first_image.picture.url }}" alt="Product Image">
     <div class="wishlist-info">
         <h3>{{ product.title }}</h3>
         <p>{{ product.brand }}</p>
@@ -32,6 +32,8 @@
     >&times;</button>
 </div>
 {% endwith %}
+{% empty %}
+<p class="faded-text">Корзина порожня.</p>
 {% endfor %}
 
 

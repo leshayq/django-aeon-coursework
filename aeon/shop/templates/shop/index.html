@@ -14,10 +14,10 @@
 <div class="slider-container">
     <div class="slider-track">
       {% for slide in sliding_images %}
-        <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.image.url }}" alt="{{ slide.title }}"></a>
+        <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.get_first_image.picture.url }}" alt="{{ slide.title }}"></a>
       {% endfor %}
       {% for slide in sliding_images %}
-        <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.image.url }}" alt="{{ slide.title }}"></a>
+        <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.get_first_image.picture.url }}" alt="{{ slide.title }}"></a>
       {% endfor %}
     </div>
   </div>    
@@ -33,7 +33,7 @@
             <div class="product-card">
                 <a class='a-no-link' href='{{ product.get_absolute_url }}'>
                     <div class="product-image">
-                        <img src="{{ product.image.url }}" alt="Product Image">
+                        <img src="{{ product.get_first_image.picture.url }}" alt="Product Image">
                     </div>
                     <div class="product-info">
                         <h2 class="product-title">{{ product.title }}</h2>

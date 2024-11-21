@@ -11,4 +11,9 @@ urlpatterns = [
     path('payment_fail/', views.payment_fail, name='payment_fail'),
     path('payment/', PayView.as_view(), name='payment'),
     path('payment/callback/', PayCallbackView.as_view(), name='payment_callback'),
+
+    path('api/search/cities/', views.search_cities, name='search_cities'),
+    path('api/search/warehouses/', views.search_warehouses, name='search_warehouses'),
+
+    # path('api/search/departments/', views.search_departments, name='search_departments'),
 ]

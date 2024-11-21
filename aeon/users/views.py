@@ -48,11 +48,11 @@ def login_user(request):
     }
     if request.META.get('HTTP_HX_REQUEST'):
         print("HTMX is available")
-        return render(request, 'users/login.html', context)
+        return render(request, 'users/auth/login.html', context)
 
     else:
         print("HTMX is not available")
-        return render(request, 'users/login_no_bootstrap.html', context)
+        return render(request, 'users/auth/login_no_bootstrap.html', context)
 
 
 def register_user(request):
@@ -77,7 +77,7 @@ def register_user(request):
     else:
         form = UserRegisterForm()
 
-    return render(request, "users/register.html", {"form":form})
+    return render(request, "users/auth/register.html", {"form":form})
 
 @login_required(login_url='/users/login/')
 def logout_user(request):
@@ -91,14 +91,14 @@ def email_verification(request):
 def profile_view(request):
     context = {}
     context['title'] = 'Профіль користувача'
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile/profile.html', context)
 
 @login_required(login_url='/users/login/')
 def orders_view(request):
     context = {}
     orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set').order_by('-id')
     context['orders'] = orders
-    return render(request, 'users/orders.html', context)
+    return render(request, 'users/profile/orders.html', context)
 
 @login_required(login_url='/users/login/')
 def shipping_view(request):
@@ -117,7 +117,7 @@ def shipping_view(request):
             shipping_address.save()
             form.save()
             return HttpResponseRedirect(reverse('users:profile'))
-    return render(request, 'users/shipping.html', {'form': form})
+    return render(request, 'users/profile/shipping.html', {'form': form})
 
 @login_required(login_url='/users/login/')
 def settings_view(request):
@@ -133,11 +133,10 @@ def settings_view(request):
                 user.set_password(password1)
                 print('password changed')
                 update_session_auth_hash(request, user)
-            print('detect')
             user.save()
             return HttpResponseRedirect(reverse('users:profile'))
 
     else:
         form = UserSettingsForm(instance=request.user)
     
-    return render(request, 'users/settings.html', {'form': form})
+    return render(request, 'users/profile/settings.html', {'form': form})

@@ -2,7 +2,7 @@
 {% for item in items %}
 <a href="{{ item.get_absolute_url }}">
 <div class="product-item">
-    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+    <img src="{{ item.get_first_image.picture.url }}" alt="{{ item.title }}">
     <div class="product-item-details">
         <div>
             <p class="product-item-title">{{ item.title }}</p>

@@ -18,7 +18,7 @@
             <div id="details-{{ order.id }}" class="order-details" style="display: none;">
                 {% for item in order.orderitem_set.all %}
                 <div class="order-item">
-                    <img src="{{ item.product.image.url }}" alt="Продукт 1">
+                    <img src="{{ item.product.get_first_image.picture.url }}" alt="Продукт 1">
                     <div class="item-details">
                         <div>{{ item.product.title }}</div>
                         <div class="item-quantity">Кількість: {{ item.quantity }}</div>
