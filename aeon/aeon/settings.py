@@ -121,23 +121,11 @@ EMAIL_MULTI_USER = False  # optional (defaults to False)
 EMAIL_MAIL_SUBJECT = 'AEON| Підтвердження пошти'
 EMAIL_MAIL_HTML = 'users/email/mail_body.html'
 EMAIL_MAIL_PLAIN = 'users/email/mail_body.txt'
-EMAIL_MAIL_TOKEN_LIFE = 60 * 60
-# 60000 * 60000
+EMAIL_MAIL_TOKEN_LIFE = 60000 * 60000
 
 # Email Verification Settings (mandatory for builtin view)
 EMAIL_MAIL_PAGE_TEMPLATE = 'users/email/email_success_template.html'
 EMAIL_MAIL_CALLBACK = email_verified_callback
-
-# # Password Recovery Settings (mandatory for email sending)
-# EMAIL_PASSWORD_SUBJECT = 'Change your password {{ user.username }}'
-# EMAIL_PASSWORD_HTML = 'password_body.html'
-# EMAIL_PASSWORD_PLAIN = 'password_body.txt'
-# EMAIL_PASSWORD_TOKEN_LIFE = 60 * 10  # 10 minutes
-
-# # Password Recovery Settings (mandatory for builtin view)
-# EMAIL_PASSWORD_PAGE_TEMPLATE = 'password_changed_template.html'
-# EMAIL_PASSWORD_CHANGE_PAGE_TEMPLATE = 'password_change_template.html'
-# EMAIL_PASSWORD_CALLBACK = password_change_callback
 
 # For Django Email Backend
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -146,6 +134,3 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL_FROM_ADDRESS')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # os.environ['password_key'] suggested
 EMAIL_USE_TLS = True
-
-LIQPAY_PUBLIC_KEY = os.getenv('LIQPAY_PUBLIC_KEY')
-LIQPAY_PRIVATE_KEY = os.getenv('LIQPAY_PRIVATE_KEY')

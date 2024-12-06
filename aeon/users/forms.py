@@ -16,7 +16,6 @@ class UserRegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(UserRegisterForm, self).__init__(*args, **kwargs)
-        # self.fields['password'].widget = PasswordInput(attrs={'placeholder': 'Ваш пароль', 'id': 'id_password1'})
         self.fields['email'].label = "E-mail"
         self.fields['first_name'].label = "Ім'я"
         self.fields['password1'].label = "Пароль"

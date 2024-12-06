@@ -32,8 +32,8 @@ class ProductImageInLine(admin.StackedInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'brand', 'slug', 'price', 'available', 'created_at', 'updated_at')
-    fields = ('title', 'brand', 'color', 'slug', 'price', 'available',)
+    list_display = ('title', 'brand', 'slug', 'price', 'available', 'category', 'created_at', 'updated_at')
+    fields = ('category', 'title', 'brand', 'color', 'slug', 'price', 'available', 'description')
     ordering = ('-created_at', '-updated_at')
     list_filter = ('available', 'created_at', 'updated_at')
     inlines = [ProductImageInLine]

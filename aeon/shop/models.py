@@ -96,11 +96,6 @@ class ProductImage(models.Model):
         verbose_name = 'Зображення товару'
         verbose_name_plural = 'Зображення товарів'
 
-    # def save(self, *args, **kwargs):
-    #     if self.product.images.count() >= 5:
-    #         raise ValidationError("Товар не может иметь больше 5 фото.")
-        
-        # super().save(*args, **kwargs)
     def __str__(self):
         return f"Зображення для {self.product.title}"   
 

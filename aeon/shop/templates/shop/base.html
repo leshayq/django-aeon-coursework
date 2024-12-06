@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'shop/css/styles.css'%}" />
     <link rel="stylesheet" type="text/css" href="{% static 'shop/css/modal.css'%}" />
     <script src="https://kit.fontawesome.com/6681e47220.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="{% static 'shop/images/small_aeon.png' %}" type="image/png">
 </head>
 <body>
     <div class="header">
@@ -30,15 +31,16 @@
                     <ul class="dropdown-menu">
                         {% for category in categories %}
                         <li class="dropdown-submenu">
-                            <img src='{{ category.icon.url }}' width='30' height='30'>
-                            <a class="test" tabindex="-1" href="#">{{ category.name }} <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                {% with category.name|get_category_content as category_content %}
-                                    {% if category_content.items %}
-                                        {% for subcategory, subitems in category_content.items %}
-                                            <li class='catalog-category-elem'>
-                                                <strong>{{ subcategory }}:</strong>
-                                                <hr>
+                            {% with category.name|get_category_content as category_content %}
+                                {% if category_content %}
+                                    <img src="{{ category.icon.url }}" width="30" height="30">
+                                    <a class="test" tabindex="-1" href="#">{{ category.name }} <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {% if category_content.items %}
+                                            {% for subcategory, subitems in category_content.items %}
+                                                <li class="catalog-category-elem">
+                                                    <strong>{{ subcategory }}:</strong>
+                                                    <hr>
                                                     <ul>
                                                         {% for brand, brand_url in subitems.items %}
                                                             <li>
@@ -46,14 +48,16 @@
                                                             </li>
                                                         {% endfor %}
                                                     </ul>
-                                            </li>
-                                        {% endfor %}
-                                    {% else %}
-                                        <li><a tabindex="-1" href="#">Немає даних</a></li>
-                                    {% endif %}
-                                {% endwith %}
-                            </ul>
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li><a tabindex="-1" href="#">Немає даних</a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            {% endwith %}
                         </li>
+                        
                         {% endfor %}
                     </ul>
                 </div>
@@ -137,7 +141,7 @@
     <script type='module' src='{% static "shop/js/module.js" %}' defer></script>
 
 
-    <!-- <script>
+    <script>
         $(document).on('submit', '#checkout-form', function(e) {
             e.preventDefault();
             $.ajax({
@@ -163,7 +167,7 @@
                 }
             });
         });
-  </script> -->
+  </script>
     
 </body>
 </html>

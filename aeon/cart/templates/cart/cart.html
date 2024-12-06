@@ -13,9 +13,9 @@
         <h3>{{ product.title }}</h3>
         <p>{{ product.brand }}</p>
         <div class="qty-container">
-            <button class="qty-btn qty-btn-increase" data-product-id="15">+</button>
+            <button class="qty-btn qty-btn-increase" data-product-id="{{ item.product.id }}">+</button>
             <input type="number" id="qtyInput{{ item.product.id }}" value="{{ item.qty }}" min="1" max="100" class="qty-input" oninput="updateCart({{ item.product.id }})">
-            <button class="qty-btn qty-btn-decrease" data-product-id="15">-</button>
+            <button class="qty-btn qty-btn-decrease" data-product-id="{{ item.product.id }}">-</button>
         </div>
     </div>
     <div class="wishlist-actions">

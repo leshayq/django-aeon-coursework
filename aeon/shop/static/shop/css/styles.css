@@ -1234,6 +1234,7 @@ animation-play-state: paused;
     color: #000 !important;
     position: sticky;
     top: 15px;
+    z-index: 1000;
 }
 
 .characteristics-list ul li a {

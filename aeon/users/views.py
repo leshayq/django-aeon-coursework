@@ -77,7 +77,16 @@ def register_user(request):
     else:
         form = UserRegisterForm()
 
-    return render(request, "users/auth/register.html", {"form":form})
+    context = {
+        'form': form,
+    }
+    if request.META.get('HTTP_HX_REQUEST'):
+        print("HTMX is available")
+        return render(request, 'users/auth/register.html', context)
+
+    else:
+        print("HTMX is not available")
+        return render(request, 'users/auth/register_no_bootstrap.html', context)
 
 @login_required(login_url='/users/login/')
 def logout_user(request):

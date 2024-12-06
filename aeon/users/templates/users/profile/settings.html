@@ -1,5 +1,5 @@
 <div class="profile-content-section">
-    <h2>Налаштування профіля</h2>
+    <h2>Налаштування профілю</h2>
     <form method="POST" class="form settings-form" action="{% url 'users:settings' %}">
         {% csrf_token %}
         {% for field in form %}

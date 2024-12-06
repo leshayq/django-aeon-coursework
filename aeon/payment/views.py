@@ -1,12 +1,9 @@
-import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
-from .forms import ShippingAddressForm
 from .models import Order, OrderItem, ShippingAddress
 from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
-# from liqpay import LiqPay
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -23,7 +20,6 @@ client = NovaPoshtaApi(os.getenv('NOVA_POSHTA_API'), timeout=30)
 def search_cities(request):
     query = request.GET.get('query', '')
     if query:
-        # Получаем данные из API Новой Почты
         cities = client.address.get_settlements(find_by_string=query, warehouse=1, limit=5)
         return JsonResponse({'success': True, 'data': cities})
     return JsonResponse({'success': False, 'message': 'Query parameter is missing'})
@@ -55,35 +51,15 @@ def checkout(request):
         'title': title,
     }
 
-    # if request.method == 'POST':
-    #     liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-    #     params = {
-    #         'action': 'pay',
-    #         'amount': str(cart_total),
-    #         'currency': 'UAH',
-    #         'description': 'Оплата замовлення',
-    #         'order_id': f'order_{request.user.id}_{cart_total}_{int(datetime.now().timestamp())}',
-    #         'version': '3',
-    #         'sandbox': 0,  
-    #         'server_url': request.build_absolute_uri('/payment/callback/'),
-    #         'result_url': request.build_absolute_uri('/payment/payment_success/'),
-    #     }
-    #     signature = liqpay.cnb_signature(params)
-    #     data = liqpay.cnb_data(params)
-    #     context.update({'signature': signature, 'data': data})
-    #     return render(request, 'payment/pay.html', context)
-
     return render(request, 'payment/checkout.html', context)
 
 @login_required(login_url='/users/login/')
 def complete_order(request):
     if request.method == 'POST':
         delivery_type = request.POST.get('delivery_type')
-        print(delivery_type)
 
         match delivery_type:
             case 'Самовивіз':
-                print('самовівоз')
                 full_name = request.POST.get('name')
                 email = request.POST.get('email')
                 number = request.POST.get('number')
@@ -101,7 +77,7 @@ def complete_order(request):
                 full_name = request.POST.get('name')
                 email = request.POST.get('email')
                 number = request.POST.get('number')
-                address = request.POST.get('address')
+                address = None
                 city = request.POST.get('city')
                 department = request.POST.get('department')
 
@@ -129,12 +105,13 @@ def complete_order(request):
         shipping_address.save()
 
         if request.user.is_authenticated:
-            order = Order.objects.create(user=request.user, shipping_address=shipping_address, total=total_price, delivery_type=delivery_type   )
+            order = Order.objects.create(user=request.user, shipping_address=shipping_address, total=total_price, delivery_type=delivery_type)
 
             for item in cart:
                 OrderItem.objects.create(order=order, product=item['product'], price=item['price'], quantity=item['qty'], user=request.user)
         else:
             return redirect('users:login')
+    return JsonResponse({'success': True})
 
     
 @login_required(login_url='/users/login/')

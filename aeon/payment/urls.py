@@ -15,5 +15,4 @@ urlpatterns = [
     path('api/search/cities/', views.search_cities, name='search_cities'),
     path('api/search/warehouses/', views.search_warehouses, name='search_warehouses'),
 
-    # path('api/search/departments/', views.search_departments, name='search_departments'),
 ]

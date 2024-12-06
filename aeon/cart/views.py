@@ -58,7 +58,6 @@ def cart_update(request):
 
         cart_total = cart.get_total_price()
 
-        # Получаем данные о товаре
         item = cart.cart[str(product_id)]
         item_price = Decimal(item['price'])
         item_total = item_price * item['qty']

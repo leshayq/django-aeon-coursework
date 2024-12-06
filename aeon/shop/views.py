@@ -1,19 +1,15 @@
 from typing import Any
-from django.db.models.query import QuerySet
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Category, ProductProxy, Product, Rating, WishList, ImageSlider
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 from django.views import View
 from django.views.generic.detail import DetailView
-from common.services import all_objects, filter_objects
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .filters import check_filtering
-from django.template import loader
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import JsonResponse
+from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import render_to_string
 from users.forms import UserLoginForm
@@ -21,6 +17,7 @@ from django.db.models import Q
 from .forms import ContactUsForm
 from django.urls import reverse
 from django.contrib import messages
+from django.http import JsonResponse
 
 class IndexView(TemplateView):
     template_name = "shop/index.html"
@@ -42,12 +39,25 @@ class IndexView(TemplateView):
 
 
 class RateView(View, LoginRequiredMixin):
+    login_url = '/users/login/'
+    redirect_field_name = 'redirect_to'
+
     def get(self, request, product_id, rating):
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                'redirect_url': f'{reverse("users:login")}?{self.redirect_field_name}={request.path}'
+            })
+        
         product = ProductProxy.objects.get(id=product_id)
         Rating.objects.filter(product=product, user=request.user).delete()
         product.rating_set.create(user=request.user, rating=rating)
-        return redirect('index') 
-
+        return JsonResponse({
+            'success': True,
+            'redirect_url': reverse('shop:product_detail', kwargs={
+                'category__slug': product.category.slug,
+                'slug': product.slug
+            })
+        })
 class ProductDetailView(DetailView):
     model = ProductProxy
     template_name = 'shop/product_detail.html'
@@ -190,18 +200,25 @@ def search_items(request):
 
     return render(request, 'shop/partials/_search_results.html', {'items': items})
 
+
 def contact_us_view(request):
     form = ContactUsForm()
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            return redirect(f'{reverse("/users/login/")}?next={request.path}')
+            request.session['contact_form_data'] = request.POST
+            return redirect(f'/users/login/?next={request.path}')
+
         form = ContactUsForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Ваш запит успішно відправлено!')
             return redirect('shop:contact_us')
 
+    if 'contact_form_data' in request.session:
+        form = ContactUsForm(request.session.pop('contact_form_data'))
+
     return render(request, 'shop/footer/contact_us.html', {'form': form, 'title': 'Напишіть нам'})
+
 
 def about_us_view(request):
     return render(request, 'shop/footer/about_us.html', {'title': 'Про нас', 'is_about_page': True})

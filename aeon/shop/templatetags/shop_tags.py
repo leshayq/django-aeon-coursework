@@ -13,23 +13,16 @@ content = {
             'Всі смартфони': '/mobilni-telefoni/?sort_option=popularity',
         },
         'Аксесуари': {
-            'Захисне скло': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-            'Зарядні пристрої': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-            'Бездротові зарядки': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-            'Адаптери і кабелі': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
+            'Захисне скло': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=Захисне+скло',
+            'Зарядні пристрої': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=зарядний+пристрій',
+            'Бездротові зарядки': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=бездротова+зарядка',
+            'Адаптери і кабелі': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=кабель&search_title=адаптер&search_title=перехідник',
         },
         'Чохли': {
-                'Сумісні з Iphone': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-                'Сумісні з Xioami': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-                'Сумісні з Samsung': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-                'Всі товари': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-        },
-        'Power Bank': {
-            'для ноутбуків': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',
-            '5 000 мАг': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',           
-            '10 000 мАг': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',           
-            '20 000 мАг': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',           
-            'Всі товари': '/mobilni-telefoni/?search_title=&lp=&mp=&brand_key=Блок2&sort_option=popularity',           
+                'Сумісні з Iphone': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=Чохол+Iphone',
+                'Сумісні з Xiaomi': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=Чохол+Xiaomi',
+                'Сумісні з Samsung': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=Чохол+Samsung',
+                'Всі товари': '/aksesuari-dlya-mobilnih-telefoniv/?sort_option=popularity&search_title=Чохол',
         },
     },
    'Телевізори та мультимедіа': {
@@ -106,4 +99,7 @@ content = {
 
 @register.filter
 def get_category_content(value):
-    return content[value] 
+    try:
+        return content[value] 
+    except KeyError:
+        return None
