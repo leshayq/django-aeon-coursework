@@ -1,4 +1,4 @@
-
+from shop.models import Brand
 def check_filtering(request):
     filters = {}
     ordering = None
@@ -18,6 +18,7 @@ def check_filtering(request):
         if max_price:
             filters['price__lte'] = float(max_price)
         if brands:
+            brands = Brand.objects.filter(name__in=brands).values_list('id', flat=True)
             filters['brand__in'] = brands
         if title:
             filters['title__icontains'] = title

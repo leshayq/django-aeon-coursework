@@ -44,7 +44,7 @@ class Category(models.Model):
         return reverse("shop:category_list", args=[str(self.slug)])
     
 class Brand(models.Model):
-    name = models.CharField(max_length=100, null=False, blank=False)
+    name = models.CharField(max_length=100, default='Невідомий', null=False, blank=False)
 
     class Meta:
         verbose_name = 'Бренд'
@@ -54,11 +54,9 @@ class Brand(models.Model):
         return self.name
 
 class Product(models.Model):
-    BRAND_CHOICES = [(i, i) for i in Brand.objects.values_list('name', flat=True)]
-
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     title = models.CharField('Назва', max_length=250)
-    brand = models.CharField('Бренд', max_length=250, default='Невiдомий', choices=BRAND_CHOICES)
+    brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name='brand', blank=True, null=True)
     color = ColorField(default='#FF0000', null=False, blank=True)
     description = models.TextField('Опис', blank=True)
     slug = models.SlugField('URL', max_length=250)

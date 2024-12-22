@@ -116,9 +116,9 @@ class CategoryListView(ListView):
 
         category = get_object_or_404(Category, slug=self.kwargs.get('category__slug'))
         
-        all_products_in_category = ProductProxy.objects.filter(category=category)
+        all_products_in_category = ProductProxy.objects.filter(category=category).select_related('brand')
 
-        brand_list = all_products_in_category.values_list('brand', flat=True).distinct().order_by('brand')
+        brand_list = all_products_in_category.values_list('brand__name', flat=True).distinct().order_by('brand__name')
 
         first_brand_list = brand_list[:3]
         remaining_brand_list = brand_list[3:]
