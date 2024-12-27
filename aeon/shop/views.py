@@ -18,6 +18,10 @@ from .forms import ContactUsForm
 from django.urls import reverse
 from django.contrib import messages
 from django.http import JsonResponse
+import redis
+from .utils import get_user_id_for_redis, create_product_history_by_user, get_products_ids_by_user, get_product_history_queryset_by_user, limit_product_history_length, replace_visited_product
+
+
 
 class IndexView(TemplateView):
     template_name = "shop/index.html"
@@ -35,6 +39,7 @@ class IndexView(TemplateView):
         context['products'] = self.get_products_with_rating(products)
         context['sliding_images'] = sliding_images  
         context['title'] = 'AEON| Магазин електронiки'
+
         return context
 
 
@@ -81,9 +86,21 @@ class ProductDetailView(DetailView):
         similars = ProductProxy.objects.filter(category=category)
         similars = similars.exclude(Q(title__contains=self.object)).order_by('-created_at', '-updated_at')[:3]
         
+        user_id = get_user_id_for_redis(self.request)
+        product_ids = get_products_ids_by_user(user_id)
+        if self.object.pk not in product_ids:
+            product_history_length = create_product_history_by_user(user_id, self.object.pk)
+            limit_product_history_length(user_id, product_history_length)
+        else:
+            replace_visited_product(user_id, self.object.pk)
+        product_history_queryset = get_product_history_queryset_by_user(product_ids, self.object.pk)
+    
+
+
         context['title'] = self.object.title
         context['rating'] = self.object.user_rating
         context['similars'] = similars
+        context['products'] = product_history_queryset
 
         return context
 

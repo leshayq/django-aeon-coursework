@@ -139,6 +139,15 @@
     </div>
 </div>
 
+{% if products %}
+<div class="top-sales">
+    <p>Переглянуті <span>товари</span></p>
+</div>
+<div class="product-grid">
+    {% include 'shop/partials/_products.html' %}
+</div>
+{% endif %}
+
 <script>
     const rate = (rating, product_id) => {
         fetch(`/rate/${product_id}/${rating}/`, {
