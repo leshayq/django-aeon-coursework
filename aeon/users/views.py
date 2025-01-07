@@ -6,7 +6,6 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django_email_verification import send_email
 from cart.cart import Cart
 from payment.forms import ShippingAddressForm
 from payment.models import Order, OrderItem, ShippingAddress
@@ -16,6 +15,7 @@ from .forms import UserSettingsForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import logout
 from payment.models import Order, OrderItem
+from .tasks import send_confirming_email
 
 def login_user(request):
     form = UserLoginForm()
@@ -71,7 +71,8 @@ def register_user(request):
 
             user.is_active = False
             user.save()
-            send_email(user)
+
+            send_confirming_email.delay(user)
             
             return HttpResponse(f"<script>window.location.href='/users/email_verification/';</script>")
     else:

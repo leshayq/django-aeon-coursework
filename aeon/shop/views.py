@@ -20,7 +20,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 import redis
 from .utils import get_user_id_for_redis, create_product_history_by_user, get_products_ids_by_user, get_product_history_queryset_by_user, limit_product_history_length, replace_visited_product
-
+from django.core.cache import cache
 
 
 class IndexView(TemplateView):
@@ -33,7 +33,14 @@ class IndexView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        products = ProductProxy.objects.all().annotate(rating_count=Count('rating')).order_by('-rating_count', 'title')[:20]
+
+        products_cache = cache.get('index_sorted_products') 
+        if products_cache:
+            products = products_cache
+        else:
+            products = ProductProxy.objects.all().annotate(rating_count=Count('rating')).order_by('-rating_count', 'title')[:20]
+            cache.set("index_sorted_products", products, 60*60)
+
         sliding_images = ImageSlider.objects.all().order_by('-created_at')[:8]
 
         context['products'] = self.get_products_with_rating(products)
@@ -70,8 +77,15 @@ class ProductDetailView(DetailView):
 
     def get_object(self, *args, **kwargs):
         try:
-            return Product.objects.get(slug=self.kwargs.get('slug'), category__slug=self.kwargs.get('category__slug'))
-        except Product.DoesNotExists:
+
+            single_product_cache = cache.get(self.kwargs.get('slug')) 
+            if single_product_cache:
+                single_product = single_product_cache
+            else:
+                single_product = Product.objects.get(slug=self.kwargs.get('slug'), category__slug=self.kwargs.get('category__slug'))
+                cache.set(self.kwargs.get('slug'), single_product, 60*60)
+            return single_product
+        except Product.DoesNotExist:
             raise Http404
     
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:

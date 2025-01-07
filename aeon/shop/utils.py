@@ -1,13 +1,14 @@
 import redis
 from .models import ProductProxy
 from django.db.models import Case, When
+from django.conf import settings
 import dotenv
 import os
 
 #redis client
 r = redis.Redis(
-    host=os.getenv('REDIS_HOST'), 
-    port=int(os.getenv('REDIS_PORT')), 
+    host=settings.REDIS_HOST, 
+    port=settings.REDIS_PORT, 
     decode_responses=True)
 
 def get_user_id_for_redis(request):
