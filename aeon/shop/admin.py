@@ -1,7 +1,21 @@
 from django.contrib import admin
 
-from .models import Category, Product, Rating, ImageSlider, ContactRequest, Brand, ProductImage, MenuItem
+from .models import Category, Product, Rating, ImageSlider, ContactRequest, Brand, ProductImage, MenuItem, ProductAttribute, Attribute, AttributeValue
 from django.utils.safestring import mark_safe
+
+class ProductAttributeInline(admin.TabularInline):
+    model = ProductAttribute
+    extra = 1
+    autocomplete_fields = ['attribute_value']
+
+@admin.register(Attribute)
+class AttributeAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
+@admin.register(AttributeValue)
+class AttributeValueAdmin(admin.ModelAdmin):
+    search_fields = ['value']
+    autocomplete_fields = ['attribute']
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
@@ -40,11 +54,11 @@ class ProductAdmin(admin.ModelAdmin):
     fields = ('category', 'title', 'brand', 'color', 'slug', 'price', 'available', 'description')
     ordering = ('-created_at', '-updated_at')
     list_filter = ('available', 'created_at', 'updated_at')
-    inlines = [ProductImageInLine]
-
+    
+    inlines = [ProductImageInLine, ProductAttributeInline]
+    
     class Media:
         js = ('shop/js/product_image_preview.js',)
-
 
     def get_prepopulated_fields(self, request, obj=None):
         return {'slug': ('title',)}

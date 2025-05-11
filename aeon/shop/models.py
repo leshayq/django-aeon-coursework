@@ -29,6 +29,29 @@ class MenuItem(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subcategories')
     icon = models.ImageField('Іконка', null=True, blank=True, upload_to='icons/')
 
+class Attribute(models.Model):
+    name = models.CharField('Назва атрибуту', max_length=100, unique=True)
+
+    class Meta:
+        verbose_name = 'Атрибут'
+        verbose_name_plural = 'Атрибути'
+
+    def __str__(self):
+        return self.name
+
+
+class AttributeValue(models.Model):
+    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE, related_name='values')
+    value = models.CharField('Значення', max_length=100)
+
+    class Meta:
+        unique_together = ('attribute', 'value')
+        verbose_name = 'Значення атрибуту'
+        verbose_name_plural = 'Значення атрибутів'
+
+    def __str__(self):
+        return f"{self.attribute.name}: {self.value}"
+
 class Category(models.Model):
     name = models.CharField('Категорія', max_length=250, db_index=True)
     slug = models.SlugField('URL', max_length=250, unique=True, null=False, editable=True)
@@ -113,6 +136,19 @@ class ProductProxy(Product):
     objects = ProductManager()
     class Meta:
         proxy = True
+
+class ProductAttribute(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='attributes')
+    attribute_value = models.ForeignKey(AttributeValue, on_delete=models.CASCADE, related_name='product_values')
+
+    class Meta:
+        unique_together = ('product', 'attribute_value')
+        verbose_name = 'Атрибут товару'
+        verbose_name_plural = 'Атрибути товарів'
+
+    def __str__(self):
+        return f"{self.product.title} – {self.attribute_value}"
+
 
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

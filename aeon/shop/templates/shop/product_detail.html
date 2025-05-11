@@ -134,6 +134,26 @@
     <div class="characteristics-title" id="dsc">
         <p>Характеристики <span style="font-weight: 600">{{ product.title }}</span></p>
     </div>
+    {% if product.attributes.exists %}
+    <div class="product-attributes-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Атрибут</th>
+                    <th>Значення</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attr in product.attributes.all %}
+                    <tr>
+                        <td>{{ attr.attribute_value.attribute.name }}</td>
+                        <td>{{ attr.attribute_value.value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
     <div class="characteristics-description">
         <p>{{ product.description|safe }}</p>
     </div>
