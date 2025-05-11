@@ -112,7 +112,9 @@
 </nav>
 {% endif %}
 
-
-
 {% endblock navpag %}
 
+{% block scripts %}
+<script src="{% static 'shop/js/show_brands.js' %}"></script>
+<script src="{% static 'shop/js/sort.js' %}"></script>
+{% endblock scripts %}

@@ -3,70 +3,70 @@ from .cart import Cart
 from shop.models import ProductProxy
 from django.http import JsonResponse
 from decimal import Decimal
+from .models import Cart, CartItem
+from .cart import CartManager
+from django.views.decorators.http import require_POST
+from shop.models import Product
+from django.shortcuts import redirect
 
 def cart_view(request):
-    cart = Cart(request)
-    context = {'cart': cart}
-    context['title'] = 'Корзина'
-    return render(request, 'cart/cart.html', context)
+    cart = CartManager(request)
+    return render(request, 'cart/cart.html', {
+        'title': 'Корзина',
+        'cart': cart,
+        'cart_items': cart.get_items(),
+        'total_price': cart.get_total_price()
+    })
 
-def cart_add(request):
-    cart = Cart(request)
-
-    if request.POST.get('action') == 'post':
-        product_id = int(request.POST.get('product_id'))
-
-        product_qty = int(request.POST.get('product_qty'))
-
-
-        product = get_object_or_404(ProductProxy, id=product_id)
-
-        cart.add(product=product, qty=product_qty)
-
-        cart_qty = cart.__len__()
-
-        response = JsonResponse({'qty': cart_qty, 'product': product.title})
-
-        return response
-
-def cart_delete(request):
-    cart = Cart(request)
-
-    if request.POST.get('action') == 'post':
-        product_id = int(request.POST.get('product_id'))
-        cart.delete(product=product_id)
-        cart_qty = cart.__len__()
-        cart_total = cart.get_total_price()
-
-        response = JsonResponse({'qty': cart_qty, 'total': cart_total})
-
-        return response
-
-
-def cart_update(request):
-    cart = Cart(request)
-
-    if request.POST.get('action') == 'post':
-        product_id = int(request.POST.get('product_id'))
-
-        try:
-            product_qty = int(request.POST.get('product_qty'))
-        except ValueError:
-            product_qty = 1
-            
-        cart.update(product=product_id, qty=product_qty)
-
-        cart_total = cart.get_total_price()
-
-        item = cart.cart[str(product_id)]
-        item_price = Decimal(item['price'])
-        item_total = item_price * item['qty']
-
-        response = JsonResponse({
-            'total': cart_total,
-            'item_price': item_price,
-            'item_qty': item['qty'],
-            'item_total': item_total
+@require_POST
+def cart_add(request, product_id):
+    cart = CartManager(request)
+    product = get_object_or_404(Product, id=product_id)
+    quantity = int(request.POST.get('quantity', 1))
+    update = request.POST.get('update', False) == 'true'
+    
+    cart.add(product=product, quantity=quantity, update_quantity=update)
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({
+            'status': 'success',
+            'cart_total': cart.get_total_items(),
+            'cart_price': cart.get_total_price()
         })
+    
+    return redirect('cart:cart_view')
 
-        return response
+@require_POST
+def cart_remove(request, product_id):
+    cart = CartManager(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart.remove(product)
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({
+            'status': 'success',
+            'cart_total': cart.get_total_items(),
+            'cart_price': cart.get_total_price()
+        })
+    
+    return redirect('cart:cart_view')
+
+def cart_update(request, product_id):
+    if request.method == 'POST':
+        cart = CartManager(request)
+        product = get_object_or_404(Product, id=product_id)
+        quantity = int(request.POST.get('quantity', 1))
+        cart.add(product=product, quantity=quantity, update_quantity=True)
+        
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            cart_item = CartItem.objects.get(cart=cart.cart, product=product)
+            return JsonResponse({
+                'status': 'success',
+                'item_price': cart_item.get_cost(),
+                'cart_total': cart.get_total_items(),
+                'cart_price': cart.get_total_price()
+            })
+        
+        return redirect('cart:cart_view')
+    
+    return redirect('cart:cart_view')

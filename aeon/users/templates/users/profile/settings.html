@@ -1,19 +1,37 @@
-<div class="profile-content-section">
-    <h2>Налаштування профілю</h2>
-    <form method="POST" class="form settings-form" action="{% url 'users:settings' %}">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="form-element">
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.help_text %}
-                <small class="helptext">{{ field.help_text }}</small>
-            {% endif %}
-            {% for error in field.errors %}
-                <div class="invalid-feedback">{{ error }}</div>
-            {% endfor %}
+{% extends 'shop/base.html' %}
+{% block title%} {{ title }} {% endblock title %}
+{% load humanize %}
+{% block content %}
+<div class="profile-container">
+    <aside class="sidebar">
+        <h2 class="sidebar-title">Профіль</h2>
+        <nav class="menu">
+            <a href="{% url 'users:orders' %}" class="menu-item">Мої замовлення</a>
+            <a class="menu-item">Налаштування профілю</a>
+            <a href="{% url 'users:logout' %}" class="menu-item" data-no-ajax="true">Вихід з акаунту</a>
+        </nav>
+    </aside>
+
+    <main class="profile-content">
+        <div class="profile-content-section">
+            <h2>Налаштування профілю</h2>
+            <form method="POST" class="form settings-form" action="{% url 'users:settings' %}">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-element">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="helptext">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <input type="submit" value="Зберегти" class="email-button">
+            </form>
         </div>
-        {% endfor %}
-        <input type="submit" value="Зберегти" class="email-button">
-    </form>
+    </main>
 </div>
+{% endblock content %}

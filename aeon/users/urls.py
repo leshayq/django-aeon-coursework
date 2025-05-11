@@ -9,9 +9,7 @@ urlpatterns = [
     path('register/', views.register_user, name='register'),
     path('logout/', views.logout_user, name='logout'),
     path('email_verification/', views.email_verification, name='email_verification'),
-    path('profile/', views.profile_view, name='profile'),
     path('orders/', views.orders_view, name='orders'),
-    path('shipping/', views.shipping_view, name='shipping'),
     path('settings/', views.settings_view, name='settings'),
 
     #password recovery

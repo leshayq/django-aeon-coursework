@@ -29,35 +29,36 @@
                 <div class='dropdown'>
                     <button class="catalog-button" type="button" data-toggle="dropdown"><i class="fa-solid fa-bars"></i> Каталог</button>
                     <ul class="dropdown-menu">
-                        {% for category in categories %}
-                        <li class="dropdown-submenu">
-                            {% with category.name|get_category_content as category_content %}
-                                {% if category_content %}
-                                    <img src="{{ category.icon.url }}" width="30" height="30">
-                                    <a class="test" tabindex="-1" href="#">{{ category.name }} <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        {% if category_content.items %}
-                                            {% for subcategory, subitems in category_content.items %}
-                                                <li class="catalog-category-elem">
-                                                    <strong>{{ subcategory }}:</strong>
-                                                    <hr>
-                                                    <ul>
-                                                        {% for brand, brand_url in subitems.items %}
-                                                            <li>
-                                                                <a href="{{ brand_url }}">{{ brand }}</a>
-                                                            </li>
-                                                        {% endfor %}
-                                                    </ul>
-                                                </li>
-                                            {% endfor %}
+                        {% for category in menu_items %}
+                            {% if category.is_main %}
+                                <li class="dropdown-submenu">
+                                    {% with category.subcategories.all as subcategories %}
+                                        {% if subcategories %}
+                                            {% if category.icon %}
+                                                <img src="{{ category.icon.url }}" width="30" height="30">
+                                            {% endif %}
+                                            <a class="test" tabindex="-1" href="{{ category.link }}">{{ category.title }} <span class="caret"></span></a>
+                                            <ul class="dropdown-menu">
+                                                {% for sub in subcategories %}
+                                                    <li class="catalog-category-elem">
+                                                        {% if sub.icon %}
+                                                            <img src="{{ sub.icon.url }}" width="20" height="20">
+                                                        {% endif %}
+                                                        <a href="{{ sub.link }}">{{ sub.title }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
                                         {% else %}
-                                            <li><a tabindex="-1" href="#">Немає даних</a></li>
+                                            <a class="test" tabindex="-1" href="{{ category.link }}">
+                                                {% if category.icon %}
+                                                    <img src="{{ category.icon.url }}" width="30" height="30">
+                                                {% endif %}
+                                                {{ category.title }}
+                                            </a>
                                         {% endif %}
-                                    </ul>
-                                {% endif %}
-                            {% endwith %}
-                        </li>
-                        
+                                    {% endwith %}
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
@@ -90,7 +91,7 @@
                 hx-target="#dialog"
                 hx-trigger="click"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#5f6368"><path d="M480-480.67q-66 0-109.67-43.66Q326.67-568 326.67-634t43.66-109.67Q414-787.33 480-787.33t109.67 43.66Q633.33-700 633.33-634t-43.66 109.67Q546-480.67 480-480.67ZM160-160v-100q0-36.67 18.5-64.17T226.67-366q65.33-30.33 127.66-45.5 62.34-15.17 125.67-15.17t125.33 15.5q62 15.5 127.28 45.3 30.54 14.42 48.96 41.81Q800-296.67 800-260v100H160Zm66.67-66.67h506.66V-260q0-14.33-8.16-27-8.17-12.67-20.5-19-60.67-29.67-114.34-41.83Q536.67-360 480-360t-111 12.17Q314.67-335.67 254.67-306q-12.34 6.33-20.17 19-7.83 12.67-7.83 27v33.33ZM480-547.33q37 0 61.83-24.84Q566.67-597 566.67-634t-24.84-61.83Q517-720.67 480-720.67t-61.83 24.84Q393.33-671 393.33-634t24.84 61.83Q443-547.33 480-547.33Zm0-86.67Zm0 407.33Z"/></svg></button>
                 {% else %}
-                <a href="{% url 'users:profile' %}">
+                <a href="{% url 'users:orders' %}">
                     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#5f6368"><path d="M400-483.33q-66 0-109.67-43.67-43.66-43.67-43.66-109.67t43.66-109.66Q334-790 400-790t109.67 43.67q43.66 43.66 43.66 109.66T509.67-527Q466-483.33 400-483.33ZM80-162.67v-100q0-34.33 17.33-62.66 17.34-28.34 49.34-43.34 65-30 127.33-45.33 62.33-15.33 126-15.33h12.33q6.34 0 11.67.66-6.67 15.34-10.5 30.84t-6.17 35.16H400q-62.33 0-118.17 14.34Q226-334 174.67-308.67q-13.67 7-20.84 19.67-7.16 12.67-7.16 26.33v33.34H410q5.33 19 13.33 35.5T442-162.67H80ZM658-120l-10.67-64q-15.33-5-30.5-13.17Q601.67-205.33 590-216l-56 14-30-50.67 46.67-42.66q-2-10.67-2-25.34 0-14.66 2-25.33L504-388.67l30-50.66 56 14q11.67-10.67 26.83-18.84 15.17-8.16 30.5-13.16l10.67-64h62.67l10.66 64q15.34 5 30.5 13.33 15.17 8.33 26.84 19.33l56-14.66 30 51.33L828-345.33q2 10 2 25t-2 25l46.67 42.66-30 50.67-56-14q-11.67 10.67-26.84 18.83-15.16 8.17-30.5 13.17l-10.66 64H658Zm31.33-120.67q35 0 57.5-22.5t22.5-57.5q0-35-22.5-57.5t-57.5-22.5q-35 0-57.5 22.5t-22.5 57.5q0 35 22.5 57.5t57.5 22.5ZM400-550q37 0 61.83-24.83 24.84-24.84 24.84-61.84t-24.84-61.83Q437-723.33 400-723.33t-61.83 24.83q-24.84 24.83-24.84 61.83t24.84 61.84Q363-550 400-550Zm0-86.67Zm10 407.34Z"/></svg>
                 </a>
                 {% endif %}
@@ -129,46 +130,16 @@
     {% include 'shop/partials/_footer.html' %}
 
     <script src="https://unpkg.com/htmx.org@2.0.2"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <script>
         var csrfToken = '{{ csrf_token }}';
-        var addToCartUrl = "{% url 'cart:add_to_cart' %}";
-        var deleteFromCartUrl = "{% url 'cart:delete_from_cart' %}";
-        var updateCartUrl = "{% url 'cart:update_cart' %}";
     </script>
 
     <script type='module' src='{% static "shop/js/module.js" %}' defer></script>
-
-
-    <script>
-        $(document).on('submit', '#checkout-form', function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '{% url "payment:complete_order" %}',
-                data: {
-                    delivery_type: $('#delivery_type').val(),
-                    name: $('#id_full_name').val(),
-                    email: $('#id_email').val(),
-                    number: $('#id_number').val(),
-                    address: $('#id_street_address').val(),
-                    city: $('#id_city').val(),
-                    department: $('#id_department').val(),
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    action: 'payment',
-                },
-                success: function(response) {
-                    console.log(response)
-                    window.location.href = '{% url "payment:payment_success"%}'
-                },
-                error: function(xhr, errormsg, err) {
-                    window.location.href = '{% url "payment:payment_fail"%}'
-                }
-            });
-        });
-  </script>
     
+    {% block scripts %}
+    {% endblock scripts %}
 </body>
 </html>
 

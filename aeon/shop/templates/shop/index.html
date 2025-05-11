@@ -3,24 +3,25 @@
 {% load humanize %}
 {% block title %} {{ title }} {% endblock title %}
 {% block content %}
-<!-- <div class="ad-banner">
-    <img src="ad-banner.png">
-</div> -->
 
+{% if sliding_images %}
 <div class="top-sales">
     <p>Великі <span>знижки</span></p>
 </div>
 
 <div class="slider-container">
     <div class="slider-track">
-      {% for slide in sliding_images %}
+        {% for slide in sliding_images %}
         <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.get_first_image.picture.url }}" alt="{{ slide.title }}"></a>
-      {% endfor %}
-      {% for slide in sliding_images %}
-        <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.get_first_image.picture.url }}" alt="{{ slide.title }}"></a>
-      {% endfor %}
+        {% empty %}
+        {% endfor %}
+        {% for slide in sliding_images %}
+            <a class="slide" href="{{ slide.product.get_absolute_url }}"><img src="{{ slide.product.get_first_image.picture.url }}" alt="{{ slide.title }}"></a>
+        {% endfor %}
     </div>
-  </div>    
+</div>
+{% else %}
+{% endif %}
 
 
 <div class="top-sales">

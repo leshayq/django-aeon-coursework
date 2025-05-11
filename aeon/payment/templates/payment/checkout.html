@@ -25,7 +25,7 @@
         {% endfor %}
 
 
-        <form id='checkout-form' method='POST' class="form"> <!-- action="{% url 'payment:complete_order' %}"  -->
+        <form id='checkout-form' method='POST' class="form" action="{% url 'payment:complete_order' %}">
           {% csrf_token %}
       
           <div class='form-element'>
@@ -78,48 +78,14 @@
       
           <input type="submit" class="payment-button" value='Оформити замовлення'> 
       </form>
+    
+{% endblock content %}
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deliveryTypeSelect = document.getElementById('delivery_type');
-            const fields = {
-                email: document.getElementById('field_email'),
-                full_name: document.getElementById('field_full_name'),
-                number: document.getElementById('field_number'),
-                address: document.getElementById('field_address'),
-                city: document.getElementById('field_city'),
-                department: document.getElementById('field_department')
-            };
-    
-            function hideAllFields() {
-                Object.values(fields).forEach(field => field.style.display = 'none');
-            }
-    
-            function showFieldsForDeliveryType(type) {
-                hideAllFields();
-                fields.email.style.display = 'block';
-                fields.full_name.style.display = 'block';
-                fields.number.style.display = 'block';
-    
-                if (type === "Кур'єр по місту") {
-                    fields.address.style.display = 'block';
-                    fields.city.style.display = 'block';
-                } else if (type === 'Доставка у відділення') {
-                    fields.city.style.display = 'block';
-                    fields.department.style.display = 'block';
-                }
-            }
-    
-            deliveryTypeSelect.addEventListener('change', function() {
-                showFieldsForDeliveryType(this.value);
-            });
-    
-            hideAllFields();
-        });
-    </script>
+{% block scripts %}
+<script src="{% static 'payment/js/deliveryMenu.js' %}"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     const cityInput = document.getElementById('id_city');
     const departmentInput = document.getElementById('id_department');
 
@@ -176,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchCities(query);
     });
 
-function fetchWarehouses(query, cityName) {
+    function fetchWarehouses(query, cityName) {
     if (!cityName) return;
 
     if (!query) {
@@ -223,15 +189,41 @@ function fetchWarehouses(query, cityName) {
         .catch(error => {
             console.error('Ошибка запроса:', error);
         });
-}
+    }
 
 
     departmentInput.addEventListener('input', function () {
         const query = departmentInput.value;
         fetchWarehouses(query, cityName);
     });
-});
+    });
+</script>
 
-    </script>
-    
-{% endblock content %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  const stripe = Stripe("{{ stripe_public_key }}");
+
+  document.getElementById("checkout-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const response = await fetch("{% url 'payment:complete_order' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.session_id) {
+      stripe.redirectToCheckout({ sessionId: data.session_id });
+    } else {
+      alert("Помилка при створенні сесії Stripe");
+    }
+  });
+</script>
+{% endblock scripts %}

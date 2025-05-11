@@ -1,37 +1,59 @@
+{% extends 'shop/base.html' %}
+{% block title%} {{ title }} {% endblock title %}
 {% load humanize %}
-<div class="profile-content-section">
-    <div class="my-orders-item">
-        {% for order in orders %}
-        <div class="order">
-            <div class="order-header">
-                <div class="order-number">
-                    Замовлення №{{ order.id }} {{ order.created|date:'d-m-Y' }}
-                </div>
-                <div class="order-summary">
-                    <div>Сума: <span class="order-total">{{ order.total|intcomma }}₴</span></div>
-                    <div>Статус: <span class="order-status">{{ order.status }}</span></div>
-                    <button class="toggle-details" data-details-id="details-{{ order.id }}">
-                        <span class="icon">+</span>
-                    </button>
-                </div>
-            </div>
-            <div id="details-{{ order.id }}" class="order-details" style="display: none;">
-                {% for item in order.orderitem_set.all %}
-                <div class="order-item">
-                    <img src="{{ item.product.get_first_image.picture.url }}" alt="Продукт 1">
-                    <div class="item-details">
-                        <div>{{ item.product.title }}</div>
-                        <div class="item-quantity">Кількість: {{ item.quantity }}</div>
+{% load static %}
+{% block content %}
+<div class="profile-container">
+    <aside class="sidebar">
+        <h2 class="sidebar-title">Профіль</h2>
+        <nav class="menu">
+            <a class="menu-item">Мої замовлення</a>
+            <a href="{% url 'users:settings' %}" class="menu-item">Налаштування профілю</a>
+            <a href="{% url 'users:logout' %}" class="menu-item" data-no-ajax="true">Вихід з акаунту</a>
+        </nav>
+    </aside>
+
+    <main class="profile-content">
+        <div class="profile-content-section">
+            <div class="my-orders-item">
+                {% for order in orders %}
+                <div class="order">
+                    <div class="order-header">
+                        <div class="order-number">
+                            Замовлення №{{ order.id }} {{ order.created|date:'d-m-Y' }}
+                        </div>
+                        <div class="order-summary">
+                            <div>Сума: <span class="order-total">{{ order.total_price|intcomma }}₴</span></div>
+                            <div>Статус: <span class="order-status">{{ order.status }}</span></div>
+                            <button class="toggle-details" data-details-id="details-{{ order.id }}">
+                                <span class="icon">+</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="details-{{ order.id }}" class="order-details" style="display: none;">
+                        {% for item in order.items.all %}
+                        <div class="order-item">
+                            <img src="{{ item.product.get_first_image.picture.url }}" alt="Продукт 1">
+                            <div class="item-details">
+                                <div>{{ item.product.title }}</div>
+                                <div class="item-quantity">Кількість: {{ item.quantity }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="order-delivery-info">Тип доставки: {{ order.delivery_type }}</div>
                     </div>
                 </div>
+                {% empty %}
+                <div class="empty-orders">
+                    <p class="faded-text">Історія замовлень порожня.</p>
+                </div>
                 {% endfor %}
-                <div class="order-delivery-info">Тип доставки: {{ order.delivery_type }}</div>
             </div>
         </div>
-        {% empty %}
-        <div class="empty-orders">
-            <p class="faded-text">Історія замовлень порожня.</p>
-        </div>
-        {% endfor %}
-    </div>
+    </main>
 </div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'users/js/order_details.js' %}"></script>
+{% endblock scripts %}

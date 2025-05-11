@@ -1,7 +1,11 @@
 from django.contrib import admin
 
-from .models import Category, Product, Rating, ImageSlider, ContactRequest, Brand, ProductImage
+from .models import Category, Product, Rating, ImageSlider, ContactRequest, Brand, ProductImage, MenuItem
 from django.utils.safestring import mark_safe
+
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ('title', 'link', 'is_main', 'parent')
 
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):

@@ -7,8 +7,7 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 from django.urls import reverse
 from cart.cart import Cart
-from payment.forms import ShippingAddressForm
-from payment.models import Order, OrderItem, ShippingAddress
+from payment.models import Order
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from .forms import UserSettingsForm
@@ -98,36 +97,12 @@ def email_verification(request):
     return render(request, 'users/email/email_verification.html', {'title': 'Підтвердження пошти'})
 
 @login_required(login_url='/users/login/')
-def profile_view(request):
-    context = {}
-    context['title'] = 'Профіль користувача'
-    return render(request, 'users/profile/profile.html', context)
-
-@login_required(login_url='/users/login/')
 def orders_view(request):
     context = {}
-    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set').order_by('-id')
+    orders = Order.objects.filter(user=request.user).prefetch_related('items__product__images').order_by('-id')
     context['orders'] = orders
+    context['title'] = 'Профіль користувача'
     return render(request, 'users/profile/orders.html', context)
-
-@login_required(login_url='/users/login/')
-def shipping_view(request):
-    try:
-        shipping_address = ShippingAddress.objects.get(user=request.user)
-    except ShippingAddress.DoesNotExist:
-        shipping_address = None
-
-    form = ShippingAddressForm(instance=shipping_address)
-
-    if request.method == 'POST':
-        form = ShippingAddressForm(request.POST, instance=shipping_address)
-        if form.is_valid():
-            shipping_address = form.save(commit=False)
-            shipping_address.user = request.user
-            shipping_address.save()
-            form.save()
-            return HttpResponseRedirect(reverse('users:profile'))
-    return render(request, 'users/profile/shipping.html', {'form': form})
 
 @login_required(login_url='/users/login/')
 def settings_view(request):

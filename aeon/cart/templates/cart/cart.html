@@ -1,49 +1,74 @@
 {% extends 'shop/base.html' %}
-{% load humanize %}
-{% block title %} {{ title }} {% endblock title %}
+{% load static %}
+
 {% block content %}
-<div class="top-sales category-sales">
-    <h1>Корзина</h1>
-</div>
-{% for item in cart %}
-{% with product=item.product %}
-<div class="wishlist-item">
-    <img src="{{ product.get_first_image.picture.url }}" alt="Product Image">
-    <div class="wishlist-info">
-        <h3>{{ product.title }}</h3>
-        <p>{{ product.brand }}</p>
-        <div class="qty-container">
-            <button class="qty-btn qty-btn-increase" data-product-id="{{ item.product.id }}">+</button>
-            <input type="number" id="qtyInput{{ item.product.id }}" value="{{ item.qty }}" min="1" max="100" class="qty-input" oninput="updateCart({{ item.product.id }})">
-            <button class="qty-btn qty-btn-decrease" data-product-id="{{ item.product.id }}">-</button>
+<div class="cart-wrapper">
+    <h1 class="cart-heading">Корзина</h1>
+
+    {% if cart_items %}
+        <div class="cart-table-container">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Ціна</th>
+                        <th>Кількість</th>
+                        <th>Всього</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr id="cart-item-{{ item.product.id }}">
+                        <td>
+                            <div class="cart-item-info">
+                                {% if item.product.get_first_image %}
+                                <img src="{{ item.product.get_first_image.picture.url }}" alt="{{ item.product.title }}" class="cart-item-image">
+                                {% endif %}
+                                <div class="cart-item-title">{{ item.product.title }}</div>
+                            </div>
+                        </td>
+                        <td>{{ item.product.price }} грн.</td>
+                        <td>
+                            <form method="post" action="{% url 'cart:cart_update' item.product.id %}" class="cart-quantity-form">
+                                {% csrf_token %}
+                                <div class="cart-quantity-controls">
+                                    <button type="button" class="cart-quantity-button" data-action="decrease">-</button>
+                                    <input type="number" name="quantity" min="1" value="{{ item.quantity }}" class="cart-quantity-input">
+                                    <button type="button" class="cart-quantity-button" data-action="increase">+</button>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="cart-item-total">{{ item.get_cost }} грн.</td>
+                        <td>
+                            <form method="post" action="{% url 'cart:cart_remove' item.product.id %}" class="cart-remove-form">
+                                {% csrf_token %}
+                                <button type="submit" class="cart-remove-button">Видалити</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="cart-total-label">Загальна сума:</td>
+                        <td colspan="2" class="cart-total-value" id="cart-total">{{ total_price }} грн.</td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-    </div>
-    <div class="wishlist-actions">
-        <span class="price" id="price-{{ item.product.id }}">₴{{ item.total|intcomma }}</span><br>
-        <span class="item-total" id="item-total-{{ item.product.id }}" style="font-size: 0.9em; color: grey;">
-            {{ item.qty }} x ₴{{ product.price|intcomma }}
-        </span>
-    </div>
-    <button 
-        class="remove-icon"
-        id="cart-delete-button"
-        type="button"
-        data-index="{{ product.id }}"
-    >&times;</button>
-</div>
-{% endwith %}
-{% empty %}
-<p class="faded-text">Корзина порожня.</p>
-{% endfor %}
 
-
-
-{% if cart.get_total_price != 0 %}
-<div class="top-sales category-sales" id="total">
-    <h1>Загальна сума: {{ cart.get_total_price|intcomma }}₴</h1>
+        <div class="cart-buttons">
+            <a href="{% url 'shop:main' %}" class="cart-continue-button">Продовжити покупки</a>
+            <a href="{% url 'payment:checkout' %}" class="cart-checkout-button">Оформити замовлення</a>
+        </div>
+    {% else %}
+    <p class="faded-text">Ваша корзина порожня. <a href="{% url 'shop:main' %}">Перейти до каталогу</a></p>
+    {% endif %}
 </div>
 
-<a href='{% url "payment:checkout" %}' class="email-button checkout-button">До сплати</a>
-{% endif %}
+{% endblock %}
 
-{% endblock content %}
+{% block scripts %}
+<script src="{% static 'cart/js/cartActions.js' %}"></script>
+{% endblock %}

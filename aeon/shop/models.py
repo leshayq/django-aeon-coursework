@@ -21,11 +21,18 @@ def rand_slug():
     """
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(3))
 
+
+class MenuItem(models.Model):
+    title = models.CharField(max_length=40, null=False)
+    link = models.CharField(max_length=100, null=False)
+    is_main = models.BooleanField(default=False)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subcategories')
+    icon = models.ImageField('Іконка', null=True, blank=True, upload_to='icons/')
+
 class Category(models.Model):
     name = models.CharField('Категорія', max_length=250, db_index=True)
     slug = models.SlugField('URL', max_length=250, unique=True, null=False, editable=True)
     created_at = models.DateTimeField('Дата створення', auto_now_add=True)
-    icon = models.ImageField('Іконка', null=True, blank=True, upload_to='icons/')
 
     class Meta:
         unique_together = (['slug'])
